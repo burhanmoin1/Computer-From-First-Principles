@@ -1,0 +1,1120 @@
+/* index.css - Premium Design System & Print Stylesheet */
+
+/* ==========================================================================
+   1. Design Tokens & Core Settings
+   ========================================================================== */
+
+:root {
+  /* Fonts */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: 'Lora', Georgia, Cambria, "Times New Roman", serif;
+  --font-mono: 'Fira Code', monospace;
+
+  /* Layout sizing */
+  --sidebar-width: 280px;
+  --header-height: 64px;
+  --max-content-width: 800px;
+  --border-radius: 12px;
+  --transition-speed: 0.25s;
+
+  /* Theme variables - Default Dark (Transistor Dark) */
+  --bg-app: #090d16;
+  --bg-sidebar: #0f172a;
+  --bg-card: #1e293b;
+  --bg-input: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-color: #6366f1;
+  --accent-color-hover: #4f46e5;
+  --border-color: #334155;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.06);
+
+  /* Element Specific Colors */
+  --color-electron: #06b6d4;
+  --color-proton: #ef4444;
+  --color-neutron: #64748b;
+  --color-voltage: #f59e0b;
+}
+
+/* Light Theme (Paper Light) */
+body.theme-light {
+  --bg-app: #f5f4f0;
+  --bg-sidebar: #eae6df;
+  --bg-card: #ffffff;
+  --bg-input: #f1ebd9;
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --text-muted: #a8a29e;
+  --accent-color: #4f46e5;
+  --accent-color-hover: #3730a3;
+  --border-color: #e7e5e4;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.05);
+  --shadow-lg: 0 12px 24px rgba(0,0,0,0.08);
+
+  --color-electron: #0891b2;
+  --color-voltage: #d97706;
+}
+
+/* Base resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-serif);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-size: 1.15rem;
+  overflow: hidden;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ==========================================================================
+   2. Main Layout Architecture
+   ========================================================================== */
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+/* Navigation Sidebar */
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 100;
+  transition: transform var(--transition-speed) ease, background-color var(--transition-speed), border-color var(--transition-speed);
+}
+
+.sidebar-header {
+  padding: 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.logo-sub {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 0;
+}
+
+.nav-section {
+  margin-bottom: 24px;
+}
+
+.nav-section-title {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  padding: 0 24px 8px 24px;
+}
+
+.nav-list {
+  list-style: none;
+}
+
+.nav-item {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  padding: 10px 24px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-left: 3px solid transparent;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+}
+
+body.theme-light .nav-item:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.nav-item.active {
+  color: var(--accent-color);
+  background-color: rgba(99, 102, 241, 0.08);
+  border-left-color: var(--accent-color);
+  font-weight: 600;
+}
+
+body.theme-light .nav-item.active {
+  background-color: rgba(79, 70, 229, 0.06);
+}
+
+.chapter-num {
+  font-size: 0.75rem;
+  font-weight: bold;
+  opacity: 0.6;
+  width: 20px;
+  display: inline-block;
+}
+
+.nav-section.locked {
+  opacity: 0.45;
+}
+
+.nav-section.locked .nav-section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge {
+  font-size: 0.6rem;
+  background-color: var(--border-color);
+  color: var(--text-muted);
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.sidebar-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Reader Area */
+.reader-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Top Navigation Bar */
+.top-bar {
+  height: var(--header-height);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background-color: rgba(9, 13, 22, 0.8);
+  backdrop-filter: blur(12px);
+  z-index: 50;
+  transition: background-color var(--transition-speed);
+}
+
+body.theme-light .top-bar {
+  background-color: rgba(245, 244, 240, 0.8);
+}
+
+.bar-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.bar-btn:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.chapter-indicator {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+}
+
+.top-bar-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Progress Indicator */
+.progress-bar-container {
+  width: 100%;
+  height: 3px;
+  background-color: var(--border-color);
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: var(--accent-color);
+  transition: width 0.1s ease;
+}
+
+/* ==========================================================================
+   3. Book Pages & Content Typography
+   ========================================================================== */
+
+.book-pages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 48px 24px;
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.book-chapter {
+  max-width: var(--max-content-width);
+  width: 100%;
+  margin-bottom: 80px;
+  display: none; /* Controlled by JavaScript active status */
+}
+
+.book-chapter.active {
+  display: block;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chapter-meta {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-color);
+  margin-bottom: 8px;
+}
+
+.chapter-title {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.section-divider {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, var(--accent-color), var(--border-color), transparent);
+  margin-bottom: 32px;
+}
+
+/* Body Text styling */
+h3 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  margin-top: 36px;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+p {
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+}
+
+p strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+ul, ol {
+  margin-bottom: 24px;
+  padding-left: 24px;
+  color: var(--text-secondary);
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+li strong {
+  color: var(--text-primary);
+}
+
+pre {
+  background-color: var(--bg-sidebar);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 16px;
+  margin: 20px 0;
+  overflow-x: auto;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--accent-color);
+  background-color: rgba(99, 102, 241, 0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+pre code {
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Native HTML Math Styling */
+.fraction {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: middle;
+  text-align: center;
+  padding: 0 4px;
+  line-height: 1.1;
+}
+
+.numerator {
+  border-bottom: 1px solid var(--text-primary);
+  padding-bottom: 2px;
+  font-size: 0.85em;
+  font-style: italic;
+}
+
+.denominator {
+  padding-top: 2px;
+  font-size: 0.85em;
+  font-style: italic;
+}
+
+.eq-or {
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  font-weight: normal;
+  font-style: normal;
+}
+
+.overline {
+  text-decoration: overline;
+}
+
+i {
+  font-family: var(--font-serif);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   4. Embedded Cards & Diagrams
+   ========================================================================== */
+
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  margin: 32px 0;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-speed), background-color var(--transition-speed);
+}
+
+.equation-card {
+  border-left: 4px solid var(--border-color);
+}
+
+.equation-card.highlight {
+  border-left-color: var(--accent-color);
+  background-image: linear-gradient(135deg, var(--bg-card), rgba(99, 102, 241, 0.03));
+}
+
+.eq-label {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.eq-math {
+  font-size: 1.8rem;
+  text-align: center;
+  margin: 16px 0;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+}
+
+.eq-details {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.dim-text {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.summary-box {
+  border-left: 4px solid var(--accent-color);
+  background-color: rgba(99, 102, 241, 0.03);
+}
+
+.summary-box h4 {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  margin-bottom: 8px;
+}
+
+.summary-box p {
+  margin-bottom: 0;
+}
+
+/* Interactive SVG Diagrams */
+.diagram-box {
+  margin: 32px 0;
+  text-align: center;
+}
+
+.diagram-container {
+  background-color: var(--bg-sidebar);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.svg-diagram {
+  max-width: 100%;
+  height: auto;
+  max-height: 350px;
+}
+
+.diagram-caption {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+  padding: 0 16px;
+}
+
+/* SVG specific styling */
+.orbit-path {
+  fill: none;
+  stroke: var(--border-color);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+}
+
+.shell-path {
+  fill: none;
+  stroke: var(--border-color);
+  stroke-width: 1.5;
+}
+
+.nucleus-glow {
+  fill: var(--color-proton);
+  fill-opacity: 0.15;
+}
+
+.particle-label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: bold;
+  fill: #ffffff;
+  text-anchor: middle;
+  dominant-baseline: central;
+  user-select: none;
+}
+
+.legend-text {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  fill: var(--text-secondary);
+}
+
+.small-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  fill: var(--text-muted);
+}
+
+.highlight-text {
+  fill: var(--color-voltage);
+  font-weight: bold;
+}
+
+/* Animations for electrons */
+.electron-particle {
+  filter: drop-shadow(0 0 4px var(--color-electron));
+  animation: orbit-animation linear infinite;
+}
+
+.valence-glow {
+  filter: drop-shadow(0 0 6px var(--color-voltage));
+}
+
+.e1 { animation-duration: 5s; offset-path: path('M 200 150 m -140, 0 a 140,50 0 1,0 280,0 a 140,50 0 1,0 -280,0'); }
+.e2 { animation-duration: 7s; offset-path: path('M 200 150 m -90, 0 a 90,110 0 1,0 180,0 a 90,110 0 1,0 -180,0'); }
+.e3 { animation-duration: 9s; offset-path: path('M 200 150 m -130, 0 a 130,100 0 1,0 260,0 a 130,100 0 1,0 -260,0'); }
+
+@keyframes orbit-animation {
+  0% { offset-distance: 0%; }
+  100% { offset-distance: 100%; }
+}
+
+/* ==========================================================================
+   5. Interactive Simulation Layout
+   ========================================================================== */
+
+.sim-card {
+  border-top: 4px solid var(--accent-color);
+}
+
+.sim-header {
+  margin-bottom: 20px;
+}
+
+.sim-badge {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background-color: var(--accent-color);
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.sim-title {
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.sim-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-bottom: 0;
+  margin-top: 4px;
+}
+
+.canvas-wrapper {
+  background-color: #040711;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+body.theme-light .canvas-wrapper {
+  background-color: #0b0f19; /* Canvas keeps its high-contrast dark style */
+}
+
+canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.sim-controls {
+  background-color: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid var(--border-color);
+}
+
+body.theme-light .sim-controls {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.control-group {
+  margin-bottom: 16px;
+}
+
+.control-group:last-child {
+  margin-bottom: 0;
+}
+
+.control-group label {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.control-value {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+/* Slider Controls */
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-input);
+  outline: none;
+  margin: 8px 0;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.sim-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.stat-box {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.stat-label {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+.stat-value {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.stat-value.state-off { color: #ef4444; }
+.stat-value.state-on { color: #22c55e; }
+
+/* Buttons & Groups */
+.btn-group {
+  display: inline-flex;
+  gap: 1px;
+  background-color: var(--border-color);
+  padding: 3px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-color-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--border-color);
+}
+
+.btn-group .btn {
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.btn-group .btn:hover {
+  color: var(--text-primary);
+  background-color: rgba(255,255,255,0.05);
+}
+
+body.theme-light .btn-group .btn:hover {
+  background-color: rgba(0,0,0,0.03);
+}
+
+.btn-group .btn.active {
+  background-color: var(--bg-card);
+  color: var(--accent-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.sim-explanation {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  text-align: left;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   6. Reader Footer Layout
+   ========================================================================== */
+
+.reader-footer {
+  height: 72px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  background-color: var(--bg-sidebar);
+  flex-shrink: 0;
+  transition: background-color var(--transition-speed);
+}
+
+/* ==========================================================================
+   7. Responsive Settings
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .sidebar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+  }
+  
+  .app-container.sidebar-open .sidebar {
+    transform: translateX(0);
+  }
+}
+
+/* ==========================================================================
+   8. Print & PDF Stylesheet (@media print)
+   ========================================================================== */
+
+.print-only {
+  display: none !important;
+}
+
+@media print {
+  /* Reset document defaults for printing */
+  html, body {
+    background-color: #ffffff !important;
+    color: #111111 !important;
+    font-family: var(--font-serif) !important;
+    font-size: 11pt !important;
+    line-height: 1.6 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .app-container {
+    display: block !important;
+    height: auto !important;
+    width: 100% !important;
+  }
+
+  /* Page margins and layout configuration */
+  @page {
+    size: letter portrait;
+    margin: 20mm 15mm 20mm 15mm;
+  }
+
+  /* Hide unnecessary web UI controls */
+  .sidebar,
+  .top-bar,
+  .progress-bar-container,
+  .reader-footer,
+  .sim-controls,
+  .btn,
+  .btn-group {
+    display: none !important;
+  }
+
+  /* Expand reader to fill paper space */
+  .reader-area {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .book-pages {
+    display: block !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Display all chapters sequentially instead of hiding inactive ones */
+  .book-chapter {
+    display: block !important;
+    opacity: 1 !important;
+    margin-bottom: 40pt !important;
+    page-break-before: always !important; /* Start each chapter on a new page */
+  }
+
+  /* Title Cover page */
+  .print-only {
+    display: block !important;
+  }
+
+  .book-cover-page {
+    page-break-before: avoid !important;
+    page-break-after: always !important;
+    height: 90vh;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: none;
+    padding-top: 150pt;
+  }
+
+  .book-main-title {
+    font-family: var(--font-display) !important;
+    font-size: 36pt !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+    margin-bottom: 12pt !important;
+  }
+
+  .book-subtitle {
+    font-family: var(--font-sans) !important;
+    font-size: 16pt !important;
+    font-weight: 400 !important;
+    color: #444444 !important;
+    line-height: 1.4 !important;
+    margin-bottom: 24pt !important;
+  }
+
+  .cover-separator {
+    width: 60pt;
+    height: 2pt;
+    background-color: #111111;
+    margin: 0 auto 24pt auto;
+  }
+
+  .book-author {
+    font-family: var(--font-sans) !important;
+    font-size: 12pt !important;
+    color: #555555 !important;
+  }
+
+  .cover-footer {
+    margin-top: 150pt;
+    font-family: var(--font-sans) !important;
+    font-size: 10pt !important;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #777777 !important;
+  }
+
+  /* Typography printing optimizations */
+  .chapter-meta {
+    font-size: 10pt !important;
+    color: #555555 !important;
+  }
+
+  .chapter-title {
+    font-size: 26pt !important;
+    color: #111111 !important;
+    margin-bottom: 12pt !important;
+  }
+
+  .section-divider {
+    background-image: none !important;
+    border-bottom: 1px solid #333333 !important;
+    margin-bottom: 20pt !important;
+  }
+
+  h3 {
+    font-size: 14pt !important;
+    margin-top: 24pt !important;
+    margin-bottom: 10pt !important;
+    page-break-after: avoid !important; /* Prevent orphans */
+  }
+
+  p {
+    margin-bottom: 12pt !important;
+    orphans: 3;
+    widows: 3;
+  }
+
+  ul, ol {
+    margin-bottom: 14pt !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Print styled cards and containers */
+  .card {
+    background: #fafafa !important;
+    border: 1px solid #dddddd !important;
+    border-left: 3px solid #333333 !important;
+    box-shadow: none !important;
+    padding: 14pt !important;
+    margin: 20pt 0 !important;
+    page-break-inside: avoid !important;
+  }
+
+  .equation-card.highlight {
+    background: #f4f4f5 !important;
+    border-left-color: #111111 !important;
+  }
+
+  .eq-math {
+    font-size: 16pt !important;
+    margin: 10pt 0 !important;
+  }
+
+  /* Diagram formatting in print */
+  .diagram-box {
+    page-break-inside: avoid !important;
+    margin: 20pt 0 !important;
+  }
+
+  .diagram-container {
+    background: #ffffff !important;
+    border: 1px solid #cccccc !important;
+    box-shadow: none !important;
+  }
+
+  /* Convert interactive canvases into static print representations */
+  .canvas-wrapper {
+    background: #ffffff !important;
+    border: 1px solid #cccccc !important;
+    padding: 10px !important;
+  }
+  
+  canvas {
+    filter: invert(1) hue-rotate(180deg) !important; /* Invert canvases to white background for printing saving ink */
+    max-height: 200px !important;
+    margin: 0 auto !important;
+  }
+
+  .sim-explanation {
+    background: #fcfcfc !important;
+    border: 1px solid #dddddd !important;
+    color: #222222 !important;
+    margin-top: 10pt !important;
+    font-size: 9pt !important;
+  }
+
+  /* Disable CSS animations for print */
+  .electron-particle {
+    animation: none !important;
+    offset-path: none !important;
+  }
+  
+  .e1 { transform: translate(110px, 125px); }
+  .e2 { transform: translate(250px, 185px); }
+  .e3 { transform: translate(220px, 70px); }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "transistor-book",
+  "version": "1.0.0",
+  "description": "An interactive, print-styled book: Computer From First Principles",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js"
+  },
+  "author": "Antigravity",
+  "license": "ISC"
+}

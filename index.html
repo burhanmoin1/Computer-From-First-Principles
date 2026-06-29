@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Computer From First Principles — Interactive Book</title>
+  <link rel="stylesheet" href="index.css">
+  <!-- Google Fonts for premium typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
+</head>
+<body class="theme-dark">
+
+  <!-- Main Container -->
+  <div class="app-container">
+
+    <!-- Navigation Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h1 class="logo-text">Antigravity</h1>
+        <p class="logo-sub">First Principles Book</p>
+      </div>
+
+      <nav class="sidebar-nav">
+        <!-- Part I -->
+        <div class="nav-section">
+          <div class="nav-section-title">Part I — The Physical World</div>
+          <ul class="nav-list">
+            <li class="nav-item active" data-target="ch-atoms"><span class="chapter-num">1</span> Atoms</li>
+            <li class="nav-item" data-target="ch-electrons"><span class="chapter-num">2</span> Electrons & Shells</li>
+            <li class="nav-item" data-target="ch-electricity"><span class="chapter-num">3</span> Electricity</li>
+            <li class="nav-item" data-target="ch-voltage"><span class="chapter-num">4</span> Voltage</li>
+            <li class="nav-item" data-target="ch-current"><span class="chapter-num">5</span> Current</li>
+            <li class="nav-item" data-target="ch-resistance"><span class="chapter-num">6</span> Resistance</li>
+            <li class="nav-item" data-target="ch-silicon"><span class="chapter-num">7</span> Silicon</li>
+            <li class="nav-item" data-target="ch-semiconductors"><span class="chapter-num">8</span> Semiconductors</li>
+            <li class="nav-item" data-target="ch-mosfets"><span class="chapter-num">9</span> MOSFETs</li>
+            <li class="nav-item" data-target="ch-cmos"><span class="chapter-num">10</span> CMOS Logic</li>
+          </ul>
+        </div>
+
+        <!-- Part II -->
+        <div class="nav-section">
+          <div class="nav-section-title">Part II — Digital Logic</div>
+          <ul class="nav-list">
+            <li class="nav-item" data-target="ch-binary"><span class="chapter-num">11</span> Binary Numbers</li>
+            <li class="nav-item" data-target="ch-boolean"><span class="chapter-num">12</span> Boolean Algebra</li>
+            <li class="nav-item" data-target="ch-gates"><span class="chapter-num">13</span> Logic Gates</li>
+            <li class="nav-item" data-target="ch-adders"><span class="chapter-num">14</span> Logic Adders</li>
+            <li class="nav-item" data-target="ch-mux"><span class="chapter-num">15</span> Multiplexers</li>
+          </ul>
+        </div>
+
+        <!-- Part III -->
+        <div class="nav-section">
+          <div class="nav-section-title">Part III — Memory</div>
+          <ul class="nav-list">
+            <li class="nav-item" data-target="ch-latches"><span class="chapter-num">16</span> Latches</li>
+            <li class="nav-item" data-target="ch-flipflops"><span class="chapter-num">17</span> Flip-Flops</li>
+            <li class="nav-item" data-target="ch-registers"><span class="chapter-num">18</span> Registers & RAM</li>
+          </ul>
+        </div>
+
+        <!-- Part IV -->
+        <div class="nav-section">
+          <div class="nav-section-title">Part IV — CPU Building</div>
+          <ul class="nav-list">
+            <li class="nav-item" data-target="ch-neumann"><span class="chapter-num">19</span> Von Neumann</li>
+            <li class="nav-item" data-target="ch-cpucomp"><span class="chapter-num">20</span> CPU Components</li>
+            <li class="nav-item" data-target="ch-fetch"><span class="chapter-num">21</span> Fetch-Execute</li>
+          </ul>
+        </div>
+
+        <!-- Part V -->
+        <div class="nav-section">
+          <div class="nav-section-title">Part V — Modern CPUs</div>
+          <ul class="nav-list">
+            <li class="nav-item" data-target="ch-isa"><span class="chapter-num">22</span> ISA Contract</li>
+            <li class="nav-item" data-target="ch-pipelines"><span class="chapter-num">23</span> CPU Pipelines</li>
+            <li class="nav-item" data-target="ch-multi"><span class="chapter-num">24</span> Multi-core</li>
+          </ul>
+        </div>
+
+        <!-- Part VI -->
+        <div class="nav-section">
+          <div class="nav-section-title">Part VI — Software</div>
+          <ul class="nav-list">
+            <li class="nav-item" data-target="ch-compilation"><span class="chapter-num">25</span> Compilation</li>
+            <li class="nav-item" data-target="ch-executables"><span class="chapter-num">26</span> Executables</li>
+          </ul>
+        </div>
+
+        <!-- Part VII -->
+        <div class="nav-section">
+          <div class="nav-section-title">Part VII — OS</div>
+          <ul class="nav-list">
+            <li class="nav-item" data-target="ch-processes"><span class="chapter-num">27</span> Processes</li>
+            <li class="nav-item" data-target="ch-virtualmem"><span class="chapter-num">28</span> Virtual Memory</li>
+            <li class="nav-item" data-target="ch-syscalls"><span class="chapter-num">29</span> System Calls</li>
+          </ul>
+        </div>
+
+        <!-- Part VIII -->
+        <div class="nav-section">
+          <div class="nav-section-title">Part VIII — Applications</div>
+          <ul class="nav-list">
+            <li class="nav-item" data-target="ch-eventloop"><span class="chapter-num">30</span> Event Loops</li>
+            <li class="nav-item" data-target="ch-rendering"><span class="chapter-num">31</span> Rendering & GPU</li>
+            <li class="nav-item" data-target="ch-networking"><span class="chapter-num">32</span> Networking</li>
+          </ul>
+        </div>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <button id="btn-print" class="btn btn-secondary">
+          <svg class="icon" viewBox="0 0 24 24"><path fill="currentColor" d="M18 3H6v4h12M6 19v3h12v-3M19 12a1 1 0 0 1-1-1a1 1 0 0 1 1-1a1 1 0 0 1 1 1a1 1 0 0 1-1 1m-1-7H6V1h12m2 7a3 3 0 0 1 3 3v6h-4v4H5v-4H1v-6a3 3 0 0 1 3-3h16Z"/></svg>
+          Save to PDF
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Reader -->
+    <main class="reader-area">
+      
+      <!-- Top Action Bar -->
+      <header class="top-bar">
+        <button id="btn-toggle-sidebar" class="bar-btn" aria-label="Toggle Sidebar">
+          <svg viewBox="0 0 24 24" class="icon"><path fill="currentColor" d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+        </button>
+        
+        <div class="chapter-indicator" id="chapter-title-indicator">
+          Part I — The Physical World / Atoms
+        </div>
+
+        <div class="top-bar-controls">
+          <button id="btn-theme-toggle" class="bar-btn" aria-label="Toggle Theme">
+            <!-- Dark mode icon (Moon) -->
+            <svg id="icon-moon" class="icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26a5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1Z"/></svg>
+            <!-- Light mode icon (Sun, hidden by default) -->
+            <svg id="icon-sun" class="icon hidden" viewBox="0 0 24 24"><path fill="currentColor" d="M12 7a5 5 0 1 0 5 5a5 5 0 0 0-5-5m0 2a3 3 0 1 1-3 3a3 3 0 0 1 3-3m0-7a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0V3a1 1 0 0 0-1-1m0 16a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0v-2a1 1 0 0 0-1-1m9-9h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 0-2M5 12H3a1 1 0 0 0 0 2h2a1 1 0 0 0 0-2m14.85-7.05a1 1 0 0 0-1.41 0l-1.42 1.42a1 1 0 0 0 1.41 1.41l1.42-1.42a1 1 0 0 0 0-1.41M6.98 17.02l-1.42 1.42a1 1 0 1 0 1.41 1.41l1.42-1.42a1 1 0 1 0-1.41-1.41m12.87 1.42l-1.42-1.42a1 1 0 1 0-1.41 1.41l1.42 1.42a1 1 0 0 0 1.41-1.41M6.98 6.98a1 1 0 0 0 0-1.41L5.56 4.15a1 1 0 1 0-1.41 1.41l1.42 1.42a1 1 0 0 0 1.41 0Z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Scroll Progress Bar -->
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <!-- Book Container -->
+      <div class="book-pages" id="book-pages">
+
+        <!-- TITLE / COVER PAGE (For print) -->
+        <section class="book-cover-page print-only">
+          <div class="cover-inner">
+            <h1 class="book-main-title">Computer From First Principles</h1>
+            <h2 class="book-subtitle">From Electrons to Applications: Understanding Every Layer of a Modern Computer</h2>
+            <div class="cover-separator"></div>
+            <p class="book-author">A Deep Dive into Computing Hardware & Physics</p>
+            <p class="cover-footer">Understanding Every Layer Under the Hood</p>
+          </div>
+        </section>
+
+        <!-- CHAPTER 1: ATOMS -->
+        <section id="ch-atoms" class="book-chapter active">
+          <div class="chapter-meta">Chapter 1</div>
+          <h2 class="chapter-title">Atoms: The Foundation of Matter</h2>
+          <hr class="section-divider">
+          
+          <p>Everything in the physical universe is composed of matter, and the fundamental building block of matter is the <strong>atom</strong>. To understand how a computer works, we must zoom in to the atomic scale, where the physical laws that govern electricity begin.</p>
+          
+          <h3>The Structure of the Atom</h3>
+          <p>At the center of every atom lies the <strong>nucleus</strong>, which is extremely dense and contains two types of subatomic particles:</p>
+          <ul>
+            <li><strong>Protons</strong>: Particles that carry a <strong>positive (+)</strong> electric charge.</li>
+            <li><strong>Neutrons</strong>: Particles that carry <strong>no charge (neutral)</strong>.</li>
+          </ul>
+          <p>Orbiting the nucleus is a cloud of much lighter particles:</p>
+          <ul>
+            <li><strong>Electrons</strong>: Particles that carry a <strong>negative (-)</strong> electric charge.</li>
+          </ul>
+
+          <!-- Atom Structure Visual -->
+          <div class="diagram-box">
+            <div class="diagram-container">
+              <svg viewBox="0 0 400 300" class="svg-diagram">
+                <ellipse cx="200" cy="150" rx="140" ry="50" class="orbit-path orbit-1" />
+                <ellipse cx="200" cy="150" rx="90" ry="110" class="orbit-path orbit-2" />
+                <ellipse cx="200" cy="150" rx="130" ry="100" class="orbit-path orbit-3" />
+                <circle cx="200" cy="150" r="30" class="nucleus-glow" />
+                <g class="nucleus-particles">
+                  <circle cx="195" cy="142" r="8" fill="#ef4444" />
+                  <circle cx="208" cy="148" r="8" fill="#ef4444" />
+                  <circle cx="190" cy="155" r="8" fill="#ef4444" />
+                  <circle cx="205" cy="138" r="8" fill="#64748b" />
+                  <circle cx="198" cy="158" r="8" fill="#64748b" />
+                  <circle cx="212" cy="156" r="8" fill="#64748b" />
+                  <text x="195" y="145" class="particle-label">+</text>
+                  <text x="208" y="151" class="particle-label">+</text>
+                  <text x="190" y="158" class="particle-label">+</text>
+                </g>
+                <circle cx="0" cy="0" r="6" fill="#06b6d4" class="electron-particle e1" />
+                <circle cx="0" cy="0" r="6" fill="#06b6d4" class="electron-particle e2" />
+                <circle cx="0" cy="0" r="6" fill="#06b6d4" class="electron-particle e3" />
+                <g transform="translate(10, 20)" class="legend">
+                  <circle cx="10" cy="10" r="6" fill="#ef4444" />
+                  <text x="25" y="14" class="legend-text">Proton (+ Charge)</text>
+                  <circle cx="10" cy="30" r="6" fill="#64748b" />
+                  <text x="25" y="34" class="legend-text">Neutron (Neutral)</text>
+                  <circle cx="10" cy="50" r="6" fill="#06b6d4" />
+                  <text x="25" y="54" class="legend-text">Electron (- Charge)</text>
+                </g>
+              </svg>
+            </div>
+            <div class="diagram-caption">Figure 1.1: Bohr model of an atom, featuring a central nucleus of protons and neutrons orbited by negative electrons.</div>
+          </div>
+
+          <p>The number of protons in an atom's nucleus defines its <strong>atomic number</strong> and determines which chemical element it is (for example, Hydrogen has 1 proton, Carbon has 6, and Silicon has 14). In a neutral, stable atom, the number of electrons orbiting the nucleus exactly equals the number of protons in the nucleus, making the overall net electrical charge of the atom zero.</p>
+        </section>
+
+        <!-- CHAPTER 2: ELECTRONS & VALENCE SHELLS -->
+        <section id="ch-electrons" class="book-chapter">
+          <div class="chapter-meta">Chapter 2</div>
+          <h2 class="chapter-title">Electrons and Valence Shells</h2>
+          <hr class="section-divider">
+
+          <p>Electrons do not orbit the nucleus in random paths. Instead, they occupy specific energy levels called <strong>electron shells</strong>.</p>
+          <ul>
+            <li>Each shell can hold only a specific maximum number of electrons.</li>
+            <li>The shells are filled from the innermost to the outermost.</li>
+            <li>The first shell holds a maximum of <strong>2</strong> electrons.</li>
+            <li>The second shell holds a maximum of <strong>8</strong> electrons.</li>
+            <li>The third shell holds a maximum of <strong>18</strong> electrons (though it is stable with <strong>8</strong>).</li>
+          </ul>
+
+          <div class="diagram-box">
+            <div class="diagram-container">
+              <svg viewBox="0 0 400 300" class="svg-diagram">
+                <circle cx="200" cy="150" r="30" class="shell-path" />
+                <circle cx="200" cy="150" r="65" class="shell-path" />
+                <circle cx="200" cy="150" r="105" class="shell-path" />
+                <circle cx="200" cy="150" r="15" fill="#f59e0b" />
+                <text x="200" y="154" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold">Nucleus</text>
+                <circle cx="200" cy="120" r="5" fill="#06b6d4" />
+                <circle cx="200" cy="180" r="5" fill="#06b6d4" />
+                <text x="210" y="123" class="small-label">Shell 1 (Max 2)</text>
+                <g fill="#06b6d4">
+                  <circle cx="135" cy="150" r="5" />
+                  <circle cx="265" cy="150" r="5" />
+                  <circle cx="200" cy="85" r="5" />
+                  <circle cx="200" cy="215" r="5" />
+                  <circle cx="154" cy="104" r="5" />
+                  <circle cx="246" cy="196" r="5" />
+                  <circle cx="154" cy="196" r="5" />
+                  <circle cx="246" cy="104" r="5" />
+                </g>
+                <text x="272" y="153" class="small-label">Shell 2 (Max 8)</text>
+                <g fill="#f59e0b">
+                  <circle cx="200" cy="45" r="7" class="valence-glow" />
+                  <circle cx="200" cy="255" r="7" class="valence-glow" />
+                  <circle cx="95" cy="150" r="7" class="valence-glow" />
+                  <circle cx="305" cy="150" r="7" class="valence-glow" />
+                </g>
+                <text x="315" y="153" class="small-label highlight-text">Valence Shell (4 electrons)</text>
+              </svg>
+            </div>
+            <div class="diagram-caption">Figure 1.2: Electron shells of a Silicon atom. The 4 valence electrons in the outermost shell are key to semiconductor conduction.</div>
+          </div>
+
+          <h3>Valence Electrons</h3>
+          <p>The outermost electron shell of an atom is called its <strong>valence shell</strong>, and the electrons residing in this shell are called <strong>valence electrons</strong>.</p>
+          <p>Valence electrons require the least amount of external energy to be stripped away from the atom, and they are the only electrons that participate in chemical bonding and electrical conduction.</p>
+        </section>
+
+        <!-- CHAPTER 3: ELECTRICITY -->
+        <section id="ch-electricity" class="book-chapter">
+          <div class="chapter-meta">Chapter 3</div>
+          <h2 class="chapter-title">Electricity: The Flow of Charge</h2>
+          <hr class="section-divider">
+
+          <p>Electricity is the physical phenomenon associated with the presence and motion of electric charge. Specifically, the controlled movement of charge through a medium.</p>
+          <p>If we apply an external force—such as an electric field—to a material, we can push valence electrons out of their orbits. Once free, these electrons drift through the material, jumping from the valence shell of one atom to the valence shell of the next. This continuous, directed drift of free electrons through a conductor is what we call <strong>electricity</strong>.</p>
+
+          <!-- INTERACTIVE SIMULATOR: ELECTRICITY -->
+          <div class="sim-card card">
+            <div class="sim-header">
+              <span class="sim-badge">Interactive Simulation</span>
+              <h4 class="sim-title">Electron Drift Simulator</h4>
+              <p class="sim-subtitle">Adjust the voltage slider to apply an electric field and see how valence electrons drift through a copper conductor.</p>
+            </div>
+            
+            <div class="sim-body">
+              <div class="canvas-wrapper">
+                <canvas id="canvas-electricity" width="600" height="150"></canvas>
+              </div>
+              <div class="sim-controls">
+                <div class="control-group">
+                  <label for="slide-voltage">Voltage (Potential Difference): <span id="val-voltage" class="control-value">0 V</span></label>
+                  <input type="range" id="slide-voltage" min="-10" max="10" value="0" step="0.5" class="slider">
+                </div>
+                <div class="sim-stats">
+                  <div class="stat-box">
+                    <span class="stat-label">Electric Field (E)</span>
+                    <span id="stat-field" class="stat-value">None</span>
+                  </div>
+                  <div class="stat-box">
+                    <span class="stat-label">Drift Speed & Direction</span>
+                    <span id="stat-drift" class="stat-value">0.00 mm/s (Static)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CHAPTER 4: VOLTAGE -->
+        <section id="ch-voltage" class="book-chapter">
+          <div class="chapter-meta">Chapter 4</div>
+          <h2 class="chapter-title">Voltage: The Electrical Pressure</h2>
+          <hr class="section-divider">
+
+          <p>Voltage (<i>V</i>), also called <strong>electric potential difference</strong>, is the difference in electric potential energy per unit charge between two points in space. Think of voltage as <strong>electrical pressure</strong>.</p>
+
+          <div class="equation-card card">
+            <div class="eq-label">Mathematical Definition of Voltage</div>
+            <div class="eq-math">
+              <i>V</i> = <span class="fraction"><span class="numerator"><i>W</i></span><span class="denominator"><i>Q</i></span></span>
+            </div>
+            <div class="eq-details">
+              Where:<br>
+              <strong>V</strong> = Voltage in Volts (V)<br>
+              <strong>W</strong> = Work done (energy transferred) in Joules (J)<br>
+              <strong>Q</strong> = Electric charge in Coulombs (C)
+            </div>
+          </div>
+        </section>
+
+        <!-- CHAPTER 5: CURRENT -->
+        <section id="ch-current" class="book-chapter">
+          <div class="chapter-meta">Chapter 5</div>
+          <h2 class="chapter-title">Current: The Rate of Flow</h2>
+          <hr class="section-divider">
+
+          <p>Electric current (<i>I</i>) is the rate at which electric charge flows past a specific point in a circuit. It is measured in <strong>Amperes (A)</strong>. One Ampere represents one Coulomb of charge passing through a cross-section of a conductor in one second (<i>I</i> = <i>Q</i>/<i>t</i>).</p>
+          <p><strong>Conventional Current vs. Electron Flow:</strong> Because electrons carry a negative charge, they physically flow from the negative (-) terminal of a voltage source to the positive (+) terminal. By historical convention, we draw current flowing from positive (+) to negative (-). Both representations work as long as usage is consistent.</p>
+        </section>
+
+        <!-- CHAPTER 6: RESISTANCE -->
+        <section id="ch-resistance" class="book-chapter">
+          <div class="chapter-meta">Chapter 6</div>
+          <h2 class="chapter-title">Resistance and Ohm's Law</h2>
+          <hr class="section-divider">
+
+          <p>Opposition to the flow of electric current is called <strong>Resistance</strong> (<i>R</i>). It represents the atomic collisions that slow down electrons, converting electrical energy into heat.</p>
+          
+          <div class="equation-card card highlight">
+            <div class="eq-label">Ohm's Law</div>
+            <div class="eq-math">
+              <i>V</i> = <i>I</i> &times; <i>R</i> &nbsp;&nbsp;<span class="eq-or">or</span>&nbsp;&nbsp; <i>I</i> = <span class="fraction"><span class="numerator"><i>V</i></span><span class="denominator"><i>R</i></span></span>
+            </div>
+          </div>
+          <p>If you increase the voltage (electrical pressure), current increases. If you increase resistance (obstruction), current decreases.</p>
+        </section>
+
+        <!-- CHAPTER 7: SILICON -->
+        <section id="ch-silicon" class="book-chapter">
+          <div class="chapter-meta">Chapter 7</div>
+          <h2 class="chapter-title">Silicon: The Essential Element</h2>
+          <hr class="section-divider">
+
+          <p>Silicon (Si) is a semiconductor: a material with electrical conductivity between that of a conductor and an insulator. It has 4 valence electrons. In a solid crystal structure, silicon atoms share their valence electrons with four neighbors in stable covalent bonds, locking the electrons in place.</p>
+        </section>
+
+        <!-- CHAPTER 8: SEMICONDUCTORS & DOPING -->
+        <section id="ch-semiconductors" class="book-chapter">
+          <div class="chapter-meta">Chapter 8</div>
+          <h2 class="chapter-title">Semiconductors and Doping</h2>
+          <hr class="section-divider">
+
+          <p>Doping is the process of adding impurities to a pure semiconductor to alter its conductivity:</p>
+          <ul>
+            <li><strong>N-Type (Negative)</strong>: Silicon doped with a group V element (like Phosphorus), which has 5 valence electrons. This introduces an unbound free electron into the crystal lattice.</li>
+            <li><strong>P-Type (Positive)</strong>: Silicon doped with a group III element (like Boron), which has 3 valence electrons. This leaves a missing bond, creating a positive charge vacancy called a <strong>hole</strong>.</li>
+          </ul>
+
+          <!-- INTERACTIVE SIMULATOR: DOPING -->
+          <div class="sim-card card">
+            <div class="sim-header">
+              <span class="sim-badge">Interactive Simulation</span>
+              <h4 class="sim-title">Silicon Lattice Doping Grid</h4>
+              <p class="sim-subtitle">Select a doping type to inject impurity atoms into the pure Silicon crystal lattice. Observe the formation of free electrons (N-type) or positive holes (P-type).</p>
+            </div>
+            
+            <div class="sim-body">
+              <div class="canvas-wrapper">
+                <canvas id="canvas-doping" width="600" height="240"></canvas>
+              </div>
+              <div class="sim-controls text-center">
+                <div class="btn-group">
+                  <button id="btn-dope-intrinsic" class="btn btn-primary active">Pure Silicon (Intrinsic)</button>
+                  <button id="btn-dope-ntype" class="btn btn-secondary">Dope N-Type (+Phosphorus)</button>
+                  <button id="btn-dope-ptype" class="btn btn-secondary">Dope P-Type (+Boron)</button>
+                </div>
+                <p id="doping-desc" class="sim-explanation">
+                  <strong>Intrinsic Silicon:</strong> Every silicon atom is covalently bonded to 4 neighbors. All electrons are locked in bonds, making it a very poor conductor.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CHAPTER 9: MOSFETS -->
+        <section id="ch-mosfets" class="book-chapter">
+          <div class="chapter-meta">Chapter 9</div>
+          <h2 class="chapter-title">MOSFETs: The Digital Switch</h2>
+          <hr class="section-divider">
+
+          <p>A MOSFET is an electronically controlled switch. An NMOS transistor consists of a P-type substrate and two N-type wells (Source and Drain). A Gate electrode sits above the region between source and drain, insulated by a thin layer of Silicon Dioxide (SiO<sub>2</sub>).</p>
+
+          <!-- INTERACTIVE SIMULATOR: MOSFET -->
+          <div class="sim-card card">
+            <div class="sim-header">
+              <span class="sim-badge">Interactive Simulation</span>
+              <h4 class="sim-title">MOSFET Transistor Channel Simulator</h4>
+              <p class="sim-subtitle">Slide the Gate Voltage (<i>V</i><sub>g</sub>) slider. Watch how the electric field repels holes (orange circles) and attracts electrons (blue circles) to form an inversion layer (conduction channel) under the oxide layer.</p>
+            </div>
+            
+            <div class="sim-body">
+              <div class="canvas-wrapper">
+                <canvas id="canvas-mosfet" width="600" height="280"></canvas>
+              </div>
+              <div class="sim-controls">
+                <div class="control-group">
+                  <label for="slide-gate-v">Gate Voltage (<i>V</i><sub>g</sub>): <span id="val-gate-v" class="control-value">0.0 V</span></label>
+                  <input type="range" id="slide-gate-v" min="0" max="5" value="0" step="0.1" class="slider">
+                </div>
+                <div class="sim-stats">
+                  <div class="stat-box">
+                    <span class="stat-label">Transistor State</span>
+                    <span id="stat-transistor-state" class="stat-value state-off">OFF (Cut-off)</span>
+                  </div>
+                  <div class="stat-box">
+                    <span class="stat-label">Source-Drain Resistance</span>
+                    <span id="stat-resistance" class="stat-value">Infinite (Mega-Ohms)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CHAPTER 10: CMOS -->
+        <section id="ch-cmos" class="book-chapter">
+          <div class="chapter-meta">Chapter 10</div>
+          <h2 class="chapter-title">CMOS: The Engine of Modern Logic</h2>
+          <hr class="section-divider">
+
+          <p>CMOS (Complementary Metal-Oxide-Semiconductor) architecture pairs NMOS and PMOS transistors. In a CMOS inverter (NOT gate), a PMOS transistor pulls the output to <i>V</i><sub>DD</sub> (logic 1) when the input is low, and an NMOS transistor pulls the output to ground (logic 0) when the input is high.</p>
+
+          <!-- INTERACTIVE SIMULATOR: CMOS -->
+          <div class="sim-card card">
+            <div class="sim-header">
+              <span class="sim-badge">Interactive Simulation</span>
+              <h4 class="sim-title">CMOS Inverter Gate Simulator</h4>
+              <p class="sim-subtitle">Click the input toggle button to switch the input logic level (<i>V</i><sub>in</sub>) between LOW (0) and HIGH (1). Observe which transistor turns on, which path current flows, and how the output voltage (<i>V</i><sub>out</sub>) changes.</p>
+            </div>
+            
+            <div class="sim-body">
+              <div class="canvas-wrapper">
+                <canvas id="canvas-cmos" width="600" height="340"></canvas>
+              </div>
+              <div class="sim-controls text-center">
+                <div class="btn-group">
+                  <button id="btn-cmos-in-low" class="btn btn-primary active">Input LOW (0 V / Logic 0)</button>
+                  <button id="btn-cmos-in-high" class="btn btn-secondary">Input HIGH (5 V / Logic 1)</button>
+                </div>
+                <p id="cmos-desc" class="sim-explanation">
+                  <strong>Input is LOW (0V):</strong> Gate voltage is low. The PMOS transistor (top) is ON, creating a conductive path to VDD. The NMOS transistor (bottom) is OFF. The output is pulled up to VDD (HIGH, Logic 1). Static current is zero.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CHAPTER 11: BINARY NUMBERS -->
+        <section id="ch-binary" class="book-chapter">
+          <div class="chapter-meta">Chapter 11</div>
+          <h2 class="chapter-title">Binary & Number Systems</h2>
+          <hr class="section-divider">
+          <p>In digital systems, voltage ranges represent two states: HIGH (1) and LOW (0). This base-2 system is called <strong>binary</strong>. A single binary digit is a <strong>bit</strong>. Eight bits grouped together form a <strong>byte</strong> (2<sup>8</sup> = 256 states).</p>
+          <p>To represent negative integers, modern computers use <strong>Two's Complement</strong> notation. In an N-bit system, the most significant bit carries a negative weight. For example, in a 4-bit system, <code>1011</code> represents -8 + 0 + 2 + 1 = -5. This notation has the elegant mathematical property that binary addition works identically for both positive and negative numbers.</p>
+        </section>
+
+        <!-- CHAPTER 12: BOOLEAN ALGEBRA -->
+        <section id="ch-boolean" class="book-chapter">
+          <div class="chapter-meta">Chapter 12</div>
+          <h2 class="chapter-title">Boolean Algebra</h2>
+          <hr class="section-divider">
+          <p>Boolean algebra is a branch of algebra where the values of variables are the truth values <em>true</em> (1) and <em>false</em> (0). The three basic operators are:</p>
+          <ul>
+            <li><strong>AND</strong> (&middot;): Output is 1 only if all inputs are 1.</li>
+            <li><strong>OR</strong> (+): Output is 1 if at least one input is 1.</li>
+            <li><strong>NOT</strong> (<span class="overline">X</span>): Outputs the opposite state of the input.</li>
+          </ul>
+          <p>Using these three operators, any logical assertion or mathematical calculation can be expressed as a Boolean function. Boolean simplification laws (such as De Morgan's laws) allow circuit designers to reduce the number of transistors required to execute a function.</p>
+        </section>
+
+        <!-- CHAPTER 13: LOGIC GATES -->
+        <section id="ch-gates" class="book-chapter">
+          <div class="chapter-meta">Chapter 13</div>
+          <h2 class="chapter-title">Logic Gates</h2>
+          <hr class="section-divider">
+          <p>Logic gates are the hardware implementation of Boolean functions. By combining NMOS and PMOS transistors in specific configurations, we build the basic gates. NAND and NOR gates are particularly simple to build in CMOS technology, and both are **universal gates**—meaning any logical circuit can be constructed using only NAND gates.</p>
+
+          <div class="diagram-box">
+            <div class="diagram-container">
+              <svg viewBox="0 0 500 120" class="svg-diagram" style="max-height: 150px;">
+                <!-- AND Gate -->
+                <path d="M 50,30 L 80,30 A 20,20 0 0,1 80,70 L 50,70 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="30" y1="40" x2="50" y2="40" stroke="currentColor" stroke-width="2"/>
+                <line x1="30" y1="60" x2="50" y2="60" stroke="currentColor" stroke-width="2"/>
+                <line x1="100" y1="50" x2="120" y2="50" stroke="currentColor" stroke-width="2"/>
+                <text x="75" y="110" text-anchor="middle" fill="currentColor" font-size="12" font-family="var(--font-sans)">AND Gate</text>
+
+                <!-- OR Gate -->
+                <path d="M 200,30 C 210,30 220,35 235,50 C 220,65 210,70 200,70 C 208,55 208,45 200,30 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M 200,30 L 210,30" stroke="currentColor" stroke-width="2"/>
+                <path d="M 200,70 L 210,70" stroke="currentColor" stroke-width="2"/>
+                <path d="M 210,30 C 225,30 240,40 245,50 C 240,60 225,70 210,70" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="180" y1="42" x2="204" y2="42" stroke="currentColor" stroke-width="2"/>
+                <line x1="180" y1="58" x2="204" y2="58" stroke="currentColor" stroke-width="2"/>
+                <line x1="245" y1="50" x2="265" y2="50" stroke="currentColor" stroke-width="2"/>
+                <text x="225" y="110" text-anchor="middle" fill="currentColor" font-size="12" font-family="var(--font-sans)">OR Gate</text>
+
+                <!-- NOT Gate -->
+                <polygon points="350,35 350,65 380,50" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="385" cy="50" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="330" y1="50" x2="350" y2="50" stroke="currentColor" stroke-width="2"/>
+                <line x1="389" y1="50" x2="410" y2="50" stroke="currentColor" stroke-width="2"/>
+                <text x="370" y="110" text-anchor="middle" fill="currentColor" font-size="12" font-family="var(--font-sans)">NOT Gate</text>
+              </svg>
+            </div>
+            <div class="diagram-caption">Figure 2.1: Schematic symbols for the standard AND, OR, and NOT (Inverter) logic gates.</div>
+          </div>
+        </section>
+
+        <!-- CHAPTER 14: LOGIC ADDERS -->
+        <section id="ch-adders" class="book-chapter">
+          <div class="chapter-meta">Chapter 14</div>
+          <h2 class="chapter-title">XOR & Logic Adders</h2>
+          <hr class="section-divider">
+          <p>The <strong>XOR (Exclusive OR)</strong> gate outputs 1 only when inputs differ. Using XOR and AND gates, we can design the <strong>Half Adder</strong>, which adds two single-bit values (<i>A</i> and <i>B</i>) to produce a Sum and a Carry bit:</p>
+          <ul>
+            <li>Sum = <i>A</i> &oplus; <i>B</i></li>
+            <li>Carry = <i>A</i> &middot; <i>B</i></li>
+          </ul>
+          <p>By placing two Half Adders together and adding an OR gate to combine the carry outputs, we construct a <strong>Full Adder</strong>. A Full Adder accepts a Carry-In (<i>C</i><sub>in</sub>) bit, allowing us to cascade them together to add multi-bit numbers.</p>
+        </section>
+
+        <!-- CHAPTER 15: MULTIPLEXERS -->
+        <section id="ch-mux" class="book-chapter">
+          <div class="chapter-meta">Chapter 15</div>
+          <h2 class="chapter-title">Multiplexers & Decoders</h2>
+          <hr class="section-divider">
+          <p>To control the routing of data in a processor, we use routing circuits:</p>
+          <ul>
+            <li><strong>Multiplexer (MUX)</strong>: Acts as a selector switch. It takes multiple input signals, and routes a single selected input to the output based on control line inputs.</li>
+            <li><strong>Decoder</strong>: Takes an N-bit binary value and activates exactly one of its 2<sup>N</sup> output lines. We use decoders to choose which hardware component or memory row is active.</li>
+          </ul>
+        </section>
+
+        <!-- CHAPTER 16: LATCHES -->
+        <section id="ch-latches" class="book-chapter">
+          <div class="chapter-meta">Chapter 16</div>
+          <h2 class="chapter-title">Latches: Feedback Loops</h2>
+          <hr class="section-divider">
+          <p>All memory is built from logic gates configured with feedback loops, where outputs wrap back to inputs. This feedback enables the circuit to lock, or "latch," into a stable state even after the input stimuli are removed.</p>
+          <p>The simplest static memory circuit is the <strong>SR Latch</strong> (Set-Reset), constructed from two cross-coupled NOR gates. Activating the Set line forces output <i>Q</i> to 1; activating the Reset line forces it to 0. When both inputs are 0, the feedback loop retains the state indefinitely, serving as a 1-bit memory.</p>
+
+          <div class="diagram-box">
+            <div class="diagram-container">
+              <svg viewBox="0 0 400 180" class="svg-diagram" style="max-height: 180px;">
+                <!-- Top NOR Gate -->
+                <path d="M 200,40 C 205,40 215,43 225,55 C 215,67 205,70 200,70 M 200,40 L 205,40 M 200,70 L 205,70" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M 205,40 C 215,40 228,48 232,55 C 228,62 215,70 205,70" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="236" cy="55" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+                
+                <!-- Bottom NOR Gate -->
+                <path d="M 200,110 C 205,110 215,113 225,125 C 215,137 205,140 200,140 M 200,110 L 205,110 M 200,140 L 205,140" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M 205,110 C 215,110 228,118 232,125 C 228,132 215,140 205,140" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="236" cy="125" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+
+                <!-- Inputs -->
+                <line x1="140" y1="45" x2="198" y2="45" stroke="currentColor" stroke-width="2"/>
+                <text x="110" y="49" fill="currentColor" font-size="12" font-family="var(--font-sans)">Set (S)</text>
+
+                <line x1="140" y1="135" x2="198" y2="135" stroke="currentColor" stroke-width="2"/>
+                <text x="105" y="139" fill="currentColor" font-size="12" font-family="var(--font-sans)">Reset (R)</text>
+
+                <!-- Outputs -->
+                <line x1="240" y1="55" x2="300" y2="55" stroke="currentColor" stroke-width="2"/>
+                <text x="315" y="59" fill="currentColor" font-size="14" font-weight="bold" font-family="var(--font-sans)">Q</text>
+
+                <line x1="240" y1="125" x2="300" y2="125" stroke="currentColor" stroke-width="2"/>
+                <text x="315" y="129" fill="currentColor" font-size="14" font-weight="bold" font-family="var(--font-sans)">Q_bar</text>
+
+                <!-- Feedback lines -->
+                <path d="M 280,55 L 280,85 L 170,100 L 170,120 L 200,120" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M 270,125 L 270,95 L 170,80 L 170,62 L 200,62" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div class="diagram-caption">Figure 3.1: Cross-coupled NOR gates forming an SR Latch capable of storing a single bit via feedback.</div>
+          </div>
+        </section>
+
+        <!-- CHAPTER 17: FLIP-FLOPS -->
+        <section id="ch-flipflops" class="book-chapter">
+          <div class="chapter-meta">Chapter 17</div>
+          <h2 class="chapter-title">Flip-Flops & Clock Signals</h2>
+          <hr class="section-divider">
+          <p>Unsynchronized feedback memory is vulnerable to timing hazards. We resolve this by feeding a **Clock (<i>CLK</i>)** oscillator signal to control the storage state.</p>
+          <p>A **D Flip-Flop** is edge-triggered: it samples the input data state <i>D</i> only at the exact instant the clock signal transitions from low to high (rising edge), locking that value output <i>Q</i> until the next cycle. This guarantees that data propagates predictably across the CPU stages in synchronization with the clock pulse.</p>
+        </section>
+
+        <!-- CHAPTER 18: REGISTERS -->
+        <section id="ch-registers" class="book-chapter">
+          <div class="chapter-meta">Chapter 18</div>
+          <h2 class="chapter-title">Registers & RAM</h2>
+          <hr class="section-divider">
+          <p>By placing multiple flip-flops side-by-side sharing a single clock trigger, we construct a <strong>Register</strong> (e.g. 64-bit register).</p>
+          <ul>
+            <li><strong>SRAM (Static RAM)</strong>: Utilizes 6-transistor latch circuits to store data. It is extremely fast, volatile, and holds its state without refreshing as long as power is applied. Used for high-speed CPU caches.</li>
+            <li><strong>DRAM (Dynamic RAM)</strong>: Stores each bit as a charge inside a single microscopic capacitor gated by a single transistor. Capacitors naturally leak energy, meaning DRAM must be continuously rewritten ("refreshed") thousands of times per second. DRAM is much cheaper and denser than SRAM, serving as main memory (RAM).</li>
+          </ul>
+        </section>
+
+        <!-- CHAPTER 19: VON NEUMANN -->
+        <section id="ch-neumann" class="book-chapter">
+          <div class="chapter-meta">Chapter 19</div>
+          <h2 class="chapter-title">The Von Neumann Architecture</h2>
+          <hr class="section-divider">
+          <p>Virtually all modern general-purpose computers utilize the **Von Neumann Architecture**. In this layout, both the program's code instructions and data variables are stored in the same unified memory space (RAM).</p>
+          
+          <div class="diagram-box">
+            <div class="diagram-container">
+              <svg viewBox="0 0 500 200" class="svg-diagram" style="max-height: 200px;">
+                <!-- CPU Box -->
+                <rect x="30" y="30" width="180" height="140" rx="6" fill="none" stroke="currentColor" stroke-width="2"/>
+                <text x="120" y="50" text-anchor="middle" fill="currentColor" font-weight="bold" font-size="12" font-family="var(--font-sans)">CPU</text>
+                <rect x="50" y="70" width="140" height="30" fill="var(--bg-card)" stroke="currentColor" stroke-dasharray="2 2"/>
+                <text x="120" y="88" text-anchor="middle" fill="currentColor" font-size="10" font-family="var(--font-sans)">Control Unit</text>
+                <rect x="50" y="115" width="140" height="30" fill="var(--bg-card)" stroke="currentColor" stroke-dasharray="2 2"/>
+                <text x="120" y="133" text-anchor="middle" fill="currentColor" font-size="10" font-family="var(--font-sans)">ALU & Registers</text>
+
+                <!-- Bus arrows -->
+                <path d="M 210,100 L 290,100" stroke="currentColor" stroke-width="4" marker-end="url(#arrow)"/>
+                <path d="M 290,100 L 210,100" stroke="currentColor" stroke-width="4"/>
+                <text x="250" y="85" text-anchor="middle" fill="currentColor" font-size="10" font-family="var(--font-sans)">Buses</text>
+
+                <!-- Memory Box -->
+                <rect x="290" y="30" width="180" height="140" rx="6" fill="none" stroke="currentColor" stroke-width="2"/>
+                <text x="380" y="50" text-anchor="middle" fill="currentColor" font-weight="bold" font-size="12" font-family="var(--font-sans)">Unified Memory (RAM)</text>
+                <rect x="310" y="70" width="140" height="35" fill="var(--bg-card)" stroke="currentColor" stroke-dasharray="2 2"/>
+                <text x="380" y="91" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Instructions (Code)</text>
+                <rect x="310" y="115" width="140" height="35" fill="var(--bg-card)" stroke="currentColor" stroke-dasharray="2 2"/>
+                <text x="380" y="136" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Variables (Data)</text>
+
+                <!-- Defs for arrows -->
+                <defs>
+                  <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+                  </marker>
+                </defs>
+              </svg>
+            </div>
+            <div class="diagram-caption">Figure 4.1: Block diagram of the classical Von Neumann computer architecture.</div>
+          </div>
+        </section>
+
+        <!-- CHAPTER 20: CPU COMPONENTS -->
+        <section id="ch-cpucomp" class="book-chapter">
+          <div class="chapter-meta">Chapter 20</div>
+          <h2 class="chapter-title">Inside the CPU: ALU & Registers</h2>
+          <hr class="section-divider">
+          <p>The CPU contains specific functional hardware components wired together:</p>
+          <ul>
+            <li><strong>ALU (Arithmetic Logic Unit)</strong>: The computer's calculator. Built from logic adders, subtractors, and logical multiplexers. It takes two input binary values, performs an operation (addition, bitwise AND, etc.), and outputs the result.</li>
+            <li><strong>Program Counter (PC)</strong>: A register that stores the memory address of the next instruction waiting to be executed.</li>
+            <li><strong>Instruction Register (IR)</strong>: A register that holds the binary code of the instruction currently being executed.</li>
+            <li><strong>Control Unit</strong>: Decodes instruction bits inside the IR and triggers coordinate control signals to route signals across buses.</li>
+          </ul>
+        </section>
+
+        <!-- CHAPTER 21: FETCH-EXECUTE -->
+        <section id="ch-fetch" class="book-chapter">
+          <div class="chapter-meta">Chapter 21</div>
+          <h2 class="chapter-title">The Fetch–Decode–Execute Cycle</h2>
+          <hr class="section-divider">
+          <p>The CPU operates by continuously executing a three-stage machine cycle synchronized by the system clock:</p>
+          <ol>
+            <li><strong>Fetch</strong>: The Control Unit fetches the instruction located at the memory address currently stored in the Program Counter (PC) and loads it into the Instruction Register (IR). The PC is then incremented to point to the next address.</li>
+            <li><strong>Decode</strong>: The Control Unit decodes the opcode bits in the IR to determine the operation (e.g. ADD, LOAD, JUMP). It configures the ALU inputs and routing paths.</li>
+            <li><strong>Execute</strong>: The operation is executed (e.g., the ALU performs the addition) and the result is written back to a register or memory location.</li>
+          </ol>
+        </section>
+
+        <!-- CHAPTER 22: ISA CONTRACT -->
+        <section id="ch-isa" class="book-chapter">
+          <div class="chapter-meta">Chapter 22</div>
+          <h2 class="chapter-title">ISA: The Interface Contract</h2>
+          <hr class="section-divider">
+          <p>The **Instruction Set Architecture (ISA)** is the abstract boundary separating CPU hardware from compiler software. It defines the supported assembly instructions, operand formats, and registers. There are two major paradigms:</p>
+          <ul>
+            <li><strong>x86-64</strong>: Complex Instruction Set Computer (CISC). Instructions vary in length (1 to 15 bytes), supporting complex instructions that load, add, and store memory in a single cycle. Standard in PCs and servers.</li>
+            <li><strong>ARM64</strong>: Reduced Instruction Set Computer (RISC). Fixed-length instructions (4 bytes) operating only on registers. Memory access is limited to explicit Load/Store instructions. Dominated by efficiency, standard in smartphones and Apple Silicon.</li>
+          </ul>
+        </section>
+
+        <!-- CHAPTER 23: CPU PIPELINES -->
+        <section id="ch-pipelines" class="book-chapter">
+          <div class="chapter-meta">Chapter 23</div>
+          <h2 class="chapter-title">Instruction Pipelines & Branch Prediction</h2>
+          <hr class="section-divider">
+          <p>To increase execution speed, modern CPUs overlap instruction execution stages using an **instruction pipeline**, resembling a factory assembly line. While one instruction is executing, the next is decoding, and a third is being fetched.</p>
+
+          <div class="diagram-box">
+            <div class="diagram-container">
+              <svg viewBox="0 0 500 150" class="svg-diagram" style="max-height: 180px;">
+                <!-- Clock labels -->
+                <text x="30" y="25" fill="currentColor" font-size="10" font-family="var(--font-sans)">Cycle:</text>
+                <text x="100" y="25" fill="currentColor" font-weight="bold" font-size="10" font-family="var(--font-sans)">1</text>
+                <text x="180" y="25" fill="currentColor" font-weight="bold" font-size="10" font-family="var(--font-sans)">2</text>
+                <text x="260" y="25" fill="currentColor" font-weight="bold" font-size="10" font-family="var(--font-sans)">3</text>
+                <text x="340" y="25" fill="currentColor" font-weight="bold" font-size="10" font-family="var(--font-sans)">4</text>
+                <text x="420" y="25" fill="currentColor" font-weight="bold" font-size="10" font-family="var(--font-sans)">5</text>
+
+                <!-- Inst 1 -->
+                <text x="30" y="55" fill="currentColor" font-size="10" font-family="var(--font-sans)">Instruction 1</text>
+                <rect x="80" y="40" width="50" height="20" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="105" y="54" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Fetch</text>
+                <rect x="160" y="40" width="50" height="20" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="185" y="54" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Decode</text>
+                <rect x="240" y="40" width="50" height="20" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="265" y="54" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Execute</text>
+
+                <!-- Inst 2 -->
+                <text x="30" y="85" fill="currentColor" font-size="10" font-family="var(--font-sans)">Instruction 2</text>
+                <rect x="160" y="70" width="50" height="20" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="185" y="84" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Fetch</text>
+                <rect x="240" y="70" width="50" height="20" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="265" y="84" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Decode</text>
+                <rect x="320" y="70" width="50" height="20" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="345" y="84" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Execute</text>
+
+                <!-- Inst 3 -->
+                <text x="30" y="115" fill="currentColor" font-size="10" font-family="var(--font-sans)">Instruction 3</text>
+                <rect x="240" y="100" width="50" height="20" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="265" y="114" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Fetch</text>
+                <rect x="320" y="100" width="50" height="20" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="345" y="114" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Decode</text>
+                <rect x="400" y="100" width="50" height="20" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="425" y="114" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Execute</text>
+              </svg>
+            </div>
+            <div class="diagram-caption">Figure 5.1: Pipeline execution timeline showing overlapped processing stages.</div>
+          </div>
+
+          <p>Pipelines suffer from **hazards** when instruction paths split (conditional branches). CPUs use hardware **Branch Prediction** blocks to guess the direction of execution pathways. If the guess is correct, execution continues instantly; if wrong, the speculative instructions are flushed, incurring a penalty.</p>
+        </section>
+
+        <!-- CHAPTER 24: MULTI-CORE -->
+        <section id="ch-multi" class="book-chapter">
+          <div class="chapter-meta">Chapter 24</div>
+          <h2 class="chapter-title">Out-of-Order Execution & Multi-Core</h2>
+          <hr class="section-divider">
+          <p>Modern performance demands go beyond pipelining:</p>
+          <ul>
+            <li><strong>Out-of-Order Execution (OoO)</strong>: Rather than stalling on slow memory fetches, the CPU schedules and executes instructions out of sequence whenever their input dependencies are resolved, reorganizing results into sequence before final commit.</li>
+            <li><strong>SIMD (Single Instruction Multiple Data)</strong>: Vector execution blocks that execute one instruction (e.g. ADD) across arrays of values in parallel.</li>
+            <li><strong>Multi-core</strong>: Packaging multiple complete CPU cores on a single silicon die. Cores operate in parallel, using hardware **Cache Coherency** protocols to sync data edits in local caches.</li>
+          </ul>
+        </section>
+
+        <!-- CHAPTER 25: COMPILATION -->
+        <section id="ch-compilation" class="book-chapter">
+          <div class="chapter-meta">Chapter 25</div>
+          <h2 class="chapter-title">The Compilation Pipeline</h2>
+          <hr class="section-divider">
+          <p>High-level code (like C or Rust) must be translated into raw binary machine instructions. The toolchain pipeline includes:</p>
+
+          <div class="diagram-box">
+            <div class="diagram-container">
+              <svg viewBox="0 0 500 100" class="svg-diagram" style="max-height: 120px;">
+                <!-- Flowboxes -->
+                <rect x="20" y="30" width="70" height="35" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <text x="55" y="52" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">C Code</text>
+
+                <path d="M 90,47 L 115,47" stroke="currentColor" stroke-width="2" marker-end="url(#arrow)"/>
+
+                <rect x="115" y="30" width="70" height="35" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <text x="150" y="52" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Compiler</text>
+
+                <path d="M 185,47 L 210,47" stroke="currentColor" stroke-width="2" marker-end="url(#arrow)"/>
+
+                <rect x="210" y="30" width="70" height="35" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <text x="245" y="52" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Assembly</text>
+
+                <path d="M 280,47 L 305,47" stroke="currentColor" stroke-width="2" marker-end="url(#arrow)"/>
+
+                <rect x="305" y="30" width="70" height="35" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <text x="340" y="52" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Assembler</text>
+
+                <path d="M 375,47 L 400,47" stroke="currentColor" stroke-width="2" marker-end="url(#arrow)"/>
+
+                <rect x="400" y="30" width="80" height="35" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <text x="440" y="52" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Machine Code</text>
+              </svg>
+            </div>
+            <div class="diagram-caption">Figure 6.1: Visual workflow of the compilation toolchain converting code to machine files.</div>
+          </div>
+
+          <p>The compiler translates structure into assembly text. The assembler encodes assembly commands into a binary **Object File**. The **Linker** resolves symbol dependencies across multiple object files and library references, outputting a unified executable file.</p>
+        </section>
+
+        <!-- CHAPTER 26: EXECUTABLES -->
+        <section id="ch-executables" class="book-chapter">
+          <div class="chapter-meta">Chapter 26</div>
+          <h2 class="chapter-title">Executables & Memory Layout</h2>
+          <hr class="section-divider">
+          <p>An executable file (such as Windows PE or Unix ELF) groups machine instructions and variables into structured segments. When launched, the OS maps these segments into virtual memory regions:</p>
+          <ul>
+            <li><strong>.text segment</strong>: Contains the binary machine code instructions (configured as read-only).</li>
+            <li><strong>.data & .bss</strong>: Store global and static variables.</li>
+            <li><strong>Stack</strong>: Fast, local memory managed automatically by the CPU to handle function frames, local variables, and return jump vectors (grows downward).</li>
+            <li><strong>Heap</strong>: Dynamically allocated memory managed at runtime via allocation requests like `malloc` (grows upward).</li>
+          </ul>
+        </section>
+
+        <!-- CHAPTER 27: PROCESSES -->
+        <section id="ch-processes" class="book-chapter">
+          <div class="chapter-meta">Chapter 27</div>
+          <h2 class="chapter-title">Processes & Thread Scheduling</h2>
+          <hr class="section-divider">
+          <p>Operating Systems manage concurrency, allocating system hardware to application processes:</p>
+          <ul>
+            <li><strong>Process</strong>: An isolated sandbox representing a running program. It owns its unique virtual address map, files, and threading contexts.</li>
+            <li><strong>Thread</strong>: The unit of CPU execution inside a process. Multiple threads share their parent process's memory space, but possess local stack states.</li>
+            <li><strong>Context Switching</strong>: The process where the OS scheduler triggers timer interrupts to pause a running thread, write its active register set to memory, load a different thread's register set, and resume execution.</li>
+          </ul>
+        </section>
+
+        <!-- CHAPTER 28: VIRTUAL MEMORY -->
+        <section id="ch-virtualmem" class="book-chapter">
+          <div class="chapter-meta">Chapter 28</div>
+          <h2 class="chapter-title">Virtual Memory & Address Translation</h2>
+          <hr class="section-divider">
+          <p>To isolate programs from each other, OS kernels map physical memory using **Virtual Memory** systems. Processes reference virtual addresses, which are translated into physical addresses by the hardware.</p>
+
+          <div class="diagram-box">
+            <div class="diagram-container">
+              <svg viewBox="0 0 500 160" class="svg-diagram" style="max-height: 180px;">
+                <!-- Virtual Memory Page Blocks -->
+                <text x="30" y="25" fill="currentColor" font-weight="bold" font-size="11" font-family="var(--font-sans)">Virtual Pages</text>
+                <rect x="30" y="40" width="110" height="25" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="85" y="56" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Process A: Page 0</text>
+                <rect x="30" y="75" width="110" height="25" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="85" y="91" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Process B: Page 0</text>
+
+                <!-- Translation Arrows -->
+                <path d="M 140,52 L 220,52" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrow)"/>
+                <path d="M 140,87 L 220,112" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrow)"/>
+                <text x="180" y="40" text-anchor="middle" fill="currentColor" font-size="8" font-family="var(--font-sans)">Page Table</text>
+
+                <!-- Physical Frames -->
+                <text x="350" y="25" fill="currentColor" font-weight="bold" font-size="11" font-family="var(--font-sans)">Physical RAM</text>
+                <rect x="350" y="40" width="110" height="25" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="405" y="56" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Frame 84 (Proc A)</text>
+                <rect x="350" y="75" width="110" height="25" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="405" y="91" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Frame 10 (Empty)</text>
+                <rect x="350" y="110" width="110" height="25" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="405" y="126" text-anchor="middle" fill="currentColor" font-size="9" font-family="var(--font-sans)">Frame 23 (Proc B)</text>
+              </svg>
+            </div>
+            <div class="diagram-caption">Figure 7.1: Virtual-to-physical address translation mapping page blocks.</div>
+          </div>
+
+          <p>Memory is split into **Pages** (e.g. 4KB blocks) mapped to **Frames** in RAM via a **Page Table**. The hardware **Memory Management Unit (MMU)** intercepts address requests to perform translation. A hardware cache called the **Translation Lookaside Buffer (TLB)** accelerates this process.</p>
+        </section>
+
+        <!-- CHAPTER 29: SYSTEM CALLS -->
+        <section id="ch-syscalls" class="book-chapter">
+          <div class="chapter-meta">Chapter 29</div>
+          <h2 class="chapter-title">System Calls & Privilege Rings</h2>
+          <hr class="section-divider">
+          <p>To protect hardware integrity, CPUs support execution rings:</p>
+          <ul>
+            <li><strong>Ring 0 (Kernel Mode)</strong>: Complete hardware instruction privileges. The OS kernel resides here.</li>
+            <li><strong>Ring 3 (User Mode)</strong>: Restrictive execution. User programs reside here.</li>
+          </ul>
+          <p>When user programs require hardware actions (e.g., writing a file or allocating socket resources), they must execute a **System Call** (syscall). This triggers a software interrupt (trap instruction), switching the CPU to Ring 0 and jumping to secure kernel routines before returning to Ring 3.</p>
+        </section>
+
+        <!-- CHAPTER 30: EVENT LOOPS -->
+        <section id="ch-eventloop" class="book-chapter">
+          <div class="chapter-meta">Chapter 30</div>
+          <h2 class="chapter-title">The Application Event Loop</h2>
+          <hr class="section-divider">
+          <p>GUI applications must remain active to process user events. They run a continuous loop called the **Event Loop**:</p>
+          <pre><code>while (GetMessage(&msg)) {
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
+}</code></pre>
+          <p>When input hardware (a key or mouse movement) triggers interrupts, the OS kernel adds the event to the active application's queue. The application's event loop fetches, translates, and dispatches these messages to event handlers, updating the GUI state and triggering redraws.</p>
+        </section>
+
+        <!-- CHAPTER 31: RENDERING -->
+        <section id="ch-rendering" class="book-chapter">
+          <div class="chapter-meta">Chapter 31</div>
+          <h2 class="chapter-title">Rendering & GPU Acceleration</h2>
+          <hr class="section-divider">
+          <p>Rendering is the process of translating layout structures into screen pixels. To prevent flickering, applications use **Double Buffering**—drawing onto an off-screen Back Buffer and swapping it with the active Front Buffer during vertical synchronization (VSync).</p>
+          <p>Modern applications offload rasterization to the **GPU (Graphics Processing Unit)**. Unlike CPUs, GPUs contain thousands of simple arithmetic cores. By feeding geometric coordinates and **Shader programs** directly to the GPU, graphics engines can calculate pixel values in parallel, rendering complex frames in fractions of a millisecond.</p>
+        </section>
+
+        <!-- CHAPTER 32: NETWORKING -->
+        <section id="ch-networking" class="book-chapter">
+          <div class="chapter-meta">Chapter 32</div>
+          <h2 class="chapter-title">Networking & Socket Communications</h2>
+          <hr class="section-divider">
+          <p>Applications transmit data using the **TCP/IP Protocol Stack**:</p>
+
+          <div class="diagram-box">
+            <div class="diagram-container">
+              <svg viewBox="0 0 500 120" class="svg-diagram" style="max-height: 150px;">
+                <!-- Stack Layers -->
+                <rect x="150" y="10" width="200" height="20" rx="3" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="250" y="24" text-anchor="middle" fill="currentColor" font-size="10" font-family="var(--font-sans)">Application (HTTP, APIs)</text>
+                
+                <rect x="150" y="35" width="200" height="20" rx="3" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="250" y="49" text-anchor="middle" fill="currentColor" font-size="10" font-family="var(--font-sans)">Transport (TCP segments, sequencing)</text>
+
+                <rect x="150" y="60" width="200" height="20" rx="3" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="250" y="74" text-anchor="middle" fill="currentColor" font-size="10" font-family="var(--font-sans)">Network (IP packets, routing)</text>
+
+                <rect x="150" y="85" width="200" height="20" rx="3" fill="var(--bg-card)" stroke="currentColor"/>
+                <text x="250" y="99" text-anchor="middle" fill="currentColor" font-size="10" font-family="var(--font-sans)">Link (Ethernet frames, physical signals)</text>
+              </svg>
+            </div>
+            <div class="diagram-caption">Figure 8.1: The layers of the TCP/IP networking protocol stack.</div>
+          </div>
+
+          <p>The Application Layer generates the message; the Transport Layer (TCP) packages it into segments and manages reliability; the Network Layer (IP) addresses segments into packets and handles routing; and the Link Layer translates packets into physical ethernet or Wi-Fi waveforms.</p>
+        </section>
+
+      </div>
+
+      <!-- BOTTOM NAVIGATION BAR -->
+      <footer class="reader-footer">
+        <button id="btn-prev" class="btn btn-secondary">
+          <svg viewBox="0 0 24 24" class="icon"><path fill="currentColor" d="M15.41 16.58L10.83 12l4.58-4.59L14 6l-6 6l6 6l1.41-1.42Z"/></svg>
+          Previous Chapter
+        </button>
+        <button id="btn-next" class="btn btn-primary">
+          Next Chapter
+          <svg viewBox="0 0 24 24" class="icon"><path fill="currentColor" d="M8.59 16.58L13.17 12L8.59 7.41L10 6l6 6l-6 6l-1.41-1.42Z"/></svg>
+        </button>
+      </footer>
+    </main>
+
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>
