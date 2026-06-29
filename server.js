@@ -11,6 +11,7 @@ app.use(express.json());
 
 // API Routes
 app.post('/api/chat', require('./api/chat.js'));
+app.get('/api/history', require('./api/history.js'));
 
 // Serve static files from the root directory
 app.use(express.static(__dirname));

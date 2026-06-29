@@ -1038,14 +1038,81 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatbotHeader = document.getElementById('chatbot-header');
   const chatbotMessages = document.getElementById('chatbot-messages');
   const explainTooltip = document.getElementById('explain-tooltip');
-  
+  const chatbotInput = document.getElementById('chatbot-input');
+  const resizeHandle = document.getElementById('chatbot-resize-handle');
+
   let selectedTextForAI = '';
   let selectedContextForAI = '';
 
+  // Generate or load unique User ID
+  let userId = localStorage.getItem('antigravity_chatbot_userid');
+  if (!userId) {
+    userId = 'usr_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
+    localStorage.setItem('antigravity_chatbot_userid', userId);
+  }
+
+  // Load chat history on startup
+  loadChatHistory();
+
+  function loadChatHistory() {
+    fetch(`/api/history?userId=${userId}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.history && data.history.length > 0) {
+          // Clear default welcome message
+          chatbotMessages.innerHTML = '';
+          data.history.forEach(msg => {
+            const formatted = msg.message.replace(/\n/g, '<br/>');
+            appendMessage(formatted, msg.role);
+          });
+        }
+      })
+      .catch(err => console.error('Failed to load chat history:', err));
+  }
+
   // Toggle chatbot
-  chatbotHeader.addEventListener('click', () => {
+  chatbotHeader.addEventListener('click', (e) => {
+    // Avoid toggling if clicking the close icon inside toggle-btn if we want, but since header contains toggle-btn, any click works
     chatbotWidget.classList.toggle('collapsed');
   });
+
+  // Top-left resizing logic
+  let isResizing = false;
+  let startWidth, startHeight, startX, startY;
+
+  resizeHandle.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Do not allow resizing if collapsed
+    if (chatbotWidget.classList.contains('collapsed')) return;
+    
+    isResizing = true;
+    startWidth = chatbotWidget.offsetWidth;
+    startHeight = chatbotWidget.offsetHeight;
+    startX = e.clientX;
+    startY = e.clientY;
+    
+    document.addEventListener('mousemove', handleResizeMouseMove);
+    document.addEventListener('mouseup', stopResize);
+  });
+
+  function handleResizeMouseMove(e) {
+    if (!isResizing) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    
+    const newWidth = Math.max(300, Math.min(600, startWidth - dx));
+    const newHeight = Math.max(200, Math.min(800, startHeight - dy));
+    
+    chatbotWidget.style.width = `${newWidth}px`;
+    chatbotWidget.style.height = `${newHeight}px`;
+  }
+
+  function stopResize() {
+    isResizing = false;
+    document.removeEventListener('mousemove', handleResizeMouseMove);
+    document.removeEventListener('mouseup', stopResize);
+  }
 
   // Handle text selection for tooltip
   document.addEventListener('selectionchange', () => {
@@ -1083,16 +1150,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Handle tooltip click
   explainTooltip.addEventListener('click', () => {
-    // Hide tooltip and clear selection visually
     explainTooltip.style.display = 'none';
     window.getSelection().removeAllRanges();
 
     // Open chatbot
     chatbotWidget.classList.remove('collapsed');
     
+    sendQuery(selectedTextForAI, selectedContextForAI);
+  });
+
+  // Handle manual input keypress
+  chatbotInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const query = chatbotInput.value.trim();
+      if (query.length === 0) return;
+      
+      chatbotInput.value = '';
+      sendQuery(query);
+    }
+  });
+
+  function sendQuery(text, context = '') {
     // Append user message
-    appendMessage(`Explain: "${selectedTextForAI}"`, 'user');
+    appendMessage(text, 'user');
     
+    // Disable input while loading
+    chatbotInput.disabled = true;
+    chatbotInput.placeholder = 'Thinking...';
+
     // Append loading bubble
     const loadingId = 'loading-' + Date.now();
     appendMessage(`<div class="chat-loading"><span></span><span></span><span></span></div>`, 'ai', loadingId);
@@ -1102,16 +1187,19 @@ document.addEventListener('DOMContentLoaded', () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        text: selectedTextForAI,
-        context: selectedContextForAI
+        text: text,
+        context: context,
+        userId: userId
       })
     })
     .then(response => response.json())
     .then(data => {
       removeMessage(loadingId);
+      chatbotInput.disabled = false;
+      chatbotInput.placeholder = 'Ask a question...';
+      
       if (data.explanation) {
-        // Simple formatting to add paragraphs
-        const formatted = data.explanation.replace(/\\n/g, '<br/>');
+        const formatted = data.explanation.replace(/\n/g, '<br/>');
         appendMessage(formatted, 'ai');
       } else {
         appendMessage('Sorry, I encountered an error explaining that.', 'ai');
@@ -1120,9 +1208,11 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(err => {
       console.error(err);
       removeMessage(loadingId);
+      chatbotInput.disabled = false;
+      chatbotInput.placeholder = 'Ask a question...';
       appendMessage('Connection error. Is the server running?', 'ai');
     });
-  });
+  }
 
   function appendMessage(htmlContent, type, id = null) {
     const msgDiv = document.createElement('div');
