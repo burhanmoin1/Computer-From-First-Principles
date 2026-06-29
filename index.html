@@ -511,7 +511,7 @@
           <div class="chapter-meta">Chapter 13</div>
           <h2 class="chapter-title">Logic Gates</h2>
           <hr class="section-divider">
-          <p>Logic gates are the hardware implementation of Boolean functions. By combining NMOS and PMOS transistors in specific configurations, we build the basic gates. NAND and NOR gates are particularly simple to build in CMOS technology, and both are **universal gates**—meaning any logical circuit can be constructed using only NAND gates.</p>
+          <p>Logic gates are the hardware implementation of Boolean functions. By combining NMOS and PMOS transistors in specific configurations, we build the basic computational units of a computer. <strong>AND</strong>, <strong>OR</strong>, and <strong>NOT</strong> form the foundational logic blocks.</p>
 
           <div class="diagram-box">
             <div class="diagram-container">
@@ -543,19 +543,113 @@
             </div>
             <div class="diagram-caption">Figure 2.1: Schematic symbols for the standard AND, OR, and NOT (Inverter) logic gates.</div>
           </div>
+
+          <p>By attaching an inverter (a NOT gate) to the output of other gates, we create <strong>NAND</strong> (NOT AND) and <strong>NOR</strong> (NOT OR) gates. These are particularly special because they are <strong>universal gates</strong>—meaning absolutely any logical circuit, up to and including a full processor, can be constructed using <em>only</em> NAND gates. This drastically simplifies mass semiconductor manufacturing.</p>
+
+          <p>We also have the <strong>XOR (Exclusive OR)</strong> gate, which outputs a 1 <em>only</em> if its inputs differ (one is 1, the other is 0). If both are 0 or both are 1, it outputs 0. XOR is the secret engine behind binary mathematical addition.</p>
+
+          <div class="diagram-box">
+            <div class="diagram-container">
+              <svg viewBox="0 0 500 120" class="svg-diagram" style="max-height: 150px;">
+                <!-- NAND Gate -->
+                <path d="M 50,30 L 80,30 A 20,20 0 0,1 80,70 L 50,70 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="104" cy="50" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="30" y1="40" x2="50" y2="40" stroke="currentColor" stroke-width="2"/>
+                <line x1="30" y1="60" x2="50" y2="60" stroke="currentColor" stroke-width="2"/>
+                <line x1="108" y1="50" x2="128" y2="50" stroke="currentColor" stroke-width="2"/>
+                <text x="75" y="110" text-anchor="middle" fill="currentColor" font-size="12" font-family="var(--font-sans)">NAND Gate</text>
+
+                <!-- NOR Gate -->
+                <path d="M 200,30 C 210,30 220,35 235,50 C 220,65 210,70 200,70 C 208,55 208,45 200,30 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M 200,30 L 210,30" stroke="currentColor" stroke-width="2"/>
+                <path d="M 200,70 L 210,70" stroke="currentColor" stroke-width="2"/>
+                <path d="M 210,30 C 225,30 240,40 245,50 C 240,60 225,70 210,70" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="249" cy="50" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="180" y1="42" x2="204" y2="42" stroke="currentColor" stroke-width="2"/>
+                <line x1="180" y1="58" x2="204" y2="58" stroke="currentColor" stroke-width="2"/>
+                <line x1="253" y1="50" x2="273" y2="50" stroke="currentColor" stroke-width="2"/>
+                <text x="225" y="110" text-anchor="middle" fill="currentColor" font-size="12" font-family="var(--font-sans)">NOR Gate</text>
+
+                <!-- XOR Gate -->
+                <path d="M 350,30 C 360,30 370,35 385,50 C 370,65 360,70 350,70 C 358,55 358,45 350,30 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M 350,30 L 360,30" stroke="currentColor" stroke-width="2"/>
+                <path d="M 350,70 L 360,70" stroke="currentColor" stroke-width="2"/>
+                <path d="M 360,30 C 375,30 390,40 395,50 C 390,60 375,70 360,70" fill="none" stroke="currentColor" stroke-width="2"/>
+                <!-- XOR input curve -->
+                <path d="M 342,30 C 350,45 350,55 342,70" fill="none" stroke="currentColor" stroke-width="2"/>
+                
+                <line x1="322" y1="42" x2="346" y2="42" stroke="currentColor" stroke-width="2"/>
+                <line x1="322" y1="58" x2="346" y2="58" stroke="currentColor" stroke-width="2"/>
+                <line x1="395" y1="50" x2="415" y2="50" stroke="currentColor" stroke-width="2"/>
+                <text x="370" y="110" text-anchor="middle" fill="currentColor" font-size="12" font-family="var(--font-sans)">XOR Gate</text>
+              </svg>
+            </div>
+            <div class="diagram-caption">Figure 2.2: Advanced universal and exclusive logic gates derived from combinations of the basic gates. Notice the small inversion circles on the outputs.</div>
+          </div>
         </section>
 
         <!-- CHAPTER 14: LOGIC ADDERS -->
         <section id="ch-adders" class="book-chapter">
           <div class="chapter-meta">Chapter 14</div>
-          <h2 class="chapter-title">XOR & Logic Adders</h2>
+          <h2 class="chapter-title">Logic Adders: Math in Hardware</h2>
           <hr class="section-divider">
-          <p>The <strong>XOR (Exclusive OR)</strong> gate outputs 1 only when inputs differ. Using XOR and AND gates, we can design the <strong>Half Adder</strong>, which adds two single-bit values (<i>A</i> and <i>B</i>) to produce a Sum and a Carry bit:</p>
+          <p>How do we actually <em>calculate</em> using voltage? Let's look at basic binary addition. When adding two single bits (A and B), there are four possibilities:</p>
           <ul>
-            <li>Sum = <i>A</i> &oplus; <i>B</i></li>
-            <li>Carry = <i>A</i> &middot; <i>B</i></li>
+            <li>0 + 0 = <strong>0</strong> (Sum: 0, Carry: 0)</li>
+            <li>0 + 1 = <strong>1</strong> (Sum: 1, Carry: 0)</li>
+            <li>1 + 0 = <strong>1</strong> (Sum: 1, Carry: 0)</li>
+            <li>1 + 1 = <strong>10</strong> (Sum: 0, Carry: 1)</li>
           </ul>
-          <p>By placing two Half Adders together and adding an OR gate to combine the carry outputs, we construct a <strong>Full Adder</strong>. A Full Adder accepts a Carry-In (<i>C</i><sub>in</sub>) bit, allowing us to cascade them together to add multi-bit numbers.</p>
+          
+          <p>Notice the pattern: The Sum bit is 1 <em>only</em> when the inputs differ. This is the exact logic of an <strong>XOR Gate</strong>! The Carry bit is 1 <em>only</em> when both inputs are 1. This is the exact logic of an <strong>AND Gate</strong>! By wiring an XOR and an AND gate in parallel, we create a <strong>Half Adder</strong>.</p>
+
+          <div class="diagram-box">
+            <div class="diagram-container">
+              <svg viewBox="0 0 400 160" class="svg-diagram" style="max-height: 180px;">
+                <!-- Inputs A and B -->
+                <text x="20" y="55" fill="currentColor" font-size="14" font-weight="bold" font-family="var(--font-sans)">A</text>
+                <text x="20" y="115" fill="currentColor" font-size="14" font-weight="bold" font-family="var(--font-sans)">B</text>
+                
+                <line x1="40" y1="50" x2="150" y2="50" stroke="currentColor" stroke-width="2"/>
+                <line x1="40" y1="110" x2="150" y2="110" stroke="currentColor" stroke-width="2"/>
+                
+                <!-- Split lines to gates -->
+                <circle cx="80" cy="50" r="3" fill="currentColor"/>
+                <line x1="80" y1="50" x2="80" y2="90" stroke="currentColor" stroke-width="2"/>
+                <line x1="80" y1="90" x2="150" y2="90" stroke="currentColor" stroke-width="2"/>
+
+                <circle cx="110" cy="110" r="3" fill="currentColor"/>
+                <line x1="110" y1="110" x2="110" y2="70" stroke="currentColor" stroke-width="2"/>
+                <line x1="110" y1="70" x2="150" y2="70" stroke="currentColor" stroke-width="2"/>
+
+                <!-- XOR Gate (Top) -->
+                <path d="M 150,40 C 160,40 170,45 185,60 C 170,75 160,80 150,80 C 158,65 158,55 150,40 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M 160,40 C 175,40 190,50 195,60 C 190,70 175,80 160,80" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M 142,40 C 150,55 150,65 142,80" fill="none" stroke="currentColor" stroke-width="2"/>
+                
+                <!-- AND Gate (Bottom) -->
+                <path d="M 150,90 L 170,90 A 20,20 0 0,1 170,130 L 150,130 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+
+                <!-- Outputs -->
+                <line x1="195" y1="60" x2="260" y2="60" stroke="currentColor" stroke-width="2"/>
+                <text x="270" y="65" fill="currentColor" font-size="14" font-weight="bold" font-family="var(--font-sans)">Sum</text>
+
+                <line x1="190" y1="110" x2="260" y2="110" stroke="currentColor" stroke-width="2"/>
+                <text x="270" y="115" fill="currentColor" font-size="14" font-weight="bold" font-family="var(--font-sans)">Carry</text>
+                
+                <!-- Box outline for Half Adder -->
+                <rect x="60" y="20" width="160" height="130" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4"/>
+                <text x="140" y="145" text-anchor="middle" fill="currentColor" font-size="12" font-style="italic" font-family="var(--font-sans)">Half Adder</text>
+              </svg>
+            </div>
+            <div class="diagram-caption">Figure 2.3: A Half Adder circuit using an XOR gate for the Sum and an AND gate for the Carry out.</div>
+          </div>
+
+          <p>But there's a problem: to add multi-digit binary numbers (like adding 8-bit numbers together), we have to carry over values to the next column. A Half Adder only accepts two inputs. It cannot accept a carry coming from a previous column.</p>
+          
+          <p>By cascading two Half Adders together and placing an OR gate at the end to catch any overflow, we construct a <strong>Full Adder</strong>. A Full Adder accepts three inputs (A, B, and Carry-In) and produces a Sum and a Carry-Out.</p>
+          
+          <p>If we daisy-chain 64 of these Full Adders in a row—connecting the Carry-Out of one into the Carry-In of the next—we have just built a <strong>64-bit Ripple-Carry Adder</strong>. We have successfully turned physical transistors into an entity capable of instantly calculating massive mathematical equations.</p>
         </section>
 
         <!-- CHAPTER 15: MULTIPLEXERS -->
@@ -619,19 +713,51 @@
           <div class="chapter-meta">Chapter 17</div>
           <h2 class="chapter-title">Flip-Flops & Clock Signals</h2>
           <hr class="section-divider">
-          <p>Unsynchronized feedback memory is vulnerable to timing hazards. We resolve this by feeding a **Clock (<i>CLK</i>)** oscillator signal to control the storage state.</p>
-          <p>A **D Flip-Flop** is edge-triggered: it samples the input data state <i>D</i> only at the exact instant the clock signal transitions from low to high (rising edge), locking that value output <i>Q</i> until the next cycle. This guarantees that data propagates predictably across the CPU stages in synchronization with the clock pulse.</p>
+          <p>An SR Latch is a great start, but unsynchronized feedback memory is chaotic. If the inputs change at slightly different times due to physical wire lengths, the memory might latch the wrong value. This is called a timing hazard.</p>
+          <p>We resolve this by adding a master conductor: a <strong>Clock (<i>CLK</i>)</strong>. A clock is an oscillator circuit that pulses high and low at a fixed frequency (e.g., a 4 GHz CPU clock pulses 4 billion times per second). We wire the latch so it <em>only</em> accepts new data when the clock ticks.</p>
+          <p>This upgraded circuit is called a <strong>D Flip-Flop</strong>. It is "edge-triggered"—meaning it samples the input data state <i>D</i> only at the exact microscopic instant the clock signal transitions from low to high (the rising edge). It locks that value to the output <i>Q</i> until the next clock cycle. This guarantees that data propagates predictably across the CPU stages in perfect synchronization.</p>
         </section>
 
         <!-- CHAPTER 18: REGISTERS -->
         <section id="ch-registers" class="book-chapter">
           <div class="chapter-meta">Chapter 18</div>
-          <h2 class="chapter-title">Registers & RAM</h2>
+          <h2 class="chapter-title">Registers: The Working Memory</h2>
           <hr class="section-divider">
-          <p>By placing multiple flip-flops side-by-side sharing a single clock trigger, we construct a <strong>Register</strong> (e.g. 64-bit register).</p>
+          <p>A single Flip-Flop stores exactly one bit. But computers operate on large numbers like 64-bit integers. How do we store them?</p>
+          <p>By placing 64 D Flip-Flops side-by-side and wiring them to a single, shared Clock line, we construct a <strong>64-bit Register</strong>. When the clock ticks, all 64 bits of data are captured and stored simultaneously. Registers are placed directly next to the calculation circuits (like the Adders) to hold the immediate working numbers being calculated.</p>
+
+          <div class="diagram-box">
+            <div class="diagram-container">
+              <svg viewBox="0 0 500 160" class="svg-diagram" style="max-height: 180px;">
+                <!-- Register Box -->
+                <rect x="150" y="30" width="200" height="100" fill="none" stroke="currentColor" stroke-width="2"/>
+                <text x="250" y="85" text-anchor="middle" fill="currentColor" font-size="16" font-weight="bold" font-family="var(--font-sans)">64-bit Register</text>
+                
+                <!-- Clock Input -->
+                <polygon points="150,110 160,115 150,120" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="80" y1="115" x2="150" y2="115" stroke="currentColor" stroke-width="2"/>
+                <text x="90" y="105" fill="currentColor" font-size="12" font-family="var(--font-sans)">CLK (Clock)</text>
+                
+                <!-- Data Inputs (64 bit bus) -->
+                <line x1="100" y1="50" x2="150" y2="50" stroke="currentColor" stroke-width="3"/>
+                <line x1="120" y1="40" x2="130" y2="60" stroke="currentColor" stroke-width="1.5"/>
+                <text x="125" y="35" text-anchor="middle" fill="currentColor" font-size="12" font-family="var(--font-sans)">64</text>
+                <text x="50" y="55" fill="currentColor" font-size="12" font-family="var(--font-sans)">Data In</text>
+
+                <!-- Data Outputs (64 bit bus) -->
+                <line x1="350" y1="80" x2="400" y2="80" stroke="currentColor" stroke-width="3"/>
+                <line x1="370" y1="70" x2="380" y2="90" stroke="currentColor" stroke-width="1.5"/>
+                <text x="375" y="65" text-anchor="middle" fill="currentColor" font-size="12" font-family="var(--font-sans)">64</text>
+                <text x="410" y="85" fill="currentColor" font-size="12" font-family="var(--font-sans)">Data Out</text>
+              </svg>
+            </div>
+            <div class="diagram-caption">Figure 3.2: A 64-bit register capturing data on the rising edge of a clock pulse. The slash denotes a multi-wire bus.</div>
+          </div>
+
+          <p>However, we can't build millions of gigabytes of memory using Registers—they require too many transistors (6 per bit) and take up too much physical space on the silicon die.</p>
           <ul>
-            <li><strong>SRAM (Static RAM)</strong>: Utilizes 6-transistor latch circuits to store data. It is extremely fast, volatile, and holds its state without refreshing as long as power is applied. Used for high-speed CPU caches.</li>
-            <li><strong>DRAM (Dynamic RAM)</strong>: Stores each bit as a charge inside a single microscopic capacitor gated by a single transistor. Capacitors naturally leak energy, meaning DRAM must be continuously rewritten ("refreshed") thousands of times per second. DRAM is much cheaper and denser than SRAM, serving as main memory (RAM).</li>
+            <li><strong>SRAM (Static RAM)</strong>: Utilizes 6-transistor latch circuits (like registers) to store data. It is extremely fast and holds state as long as power is applied. It is used for small, high-speed CPU caches.</li>
+            <li><strong>DRAM (Dynamic RAM)</strong>: Stores each bit as an electrical charge inside a single microscopic capacitor, gated by a single transistor. Capacitors naturally leak energy, meaning DRAM must be continuously rewritten ("refreshed") thousands of times per second. DRAM is much cheaper and denser than SRAM, serving as your main computer memory (RAM).</li>
           </ul>
         </section>
 
@@ -683,26 +809,30 @@
           <div class="chapter-meta">Chapter 20</div>
           <h2 class="chapter-title">Inside the CPU: ALU & Registers</h2>
           <hr class="section-divider">
-          <p>The CPU contains specific functional hardware components wired together:</p>
+          <p>We've built Logic Adders to calculate, and Registers to store data. How do we make them "programmable"? Instead of physically re-wiring the circuits for every new math problem, we use <strong>Multiplexers (MUX)</strong> to electronically route the signals. By sending specific 1s and 0s to the MUX select pins, we can choose whether the adder circuit's inputs receive data from Register A or Register B, and where the result goes.</p>
+          
+          <p>The CPU is constructed from these specific functional hardware components wired together with multiplexers:</p>
           <ul>
-            <li><strong>ALU (Arithmetic Logic Unit)</strong>: The computer's calculator. Built from logic adders, subtractors, and logical multiplexers. It takes two input binary values, performs an operation (addition, bitwise AND, etc.), and outputs the result.</li>
-            <li><strong>Program Counter (PC)</strong>: A register that stores the memory address of the next instruction waiting to be executed.</li>
-            <li><strong>Instruction Register (IR)</strong>: A register that holds the binary code of the instruction currently being executed.</li>
-            <li><strong>Control Unit</strong>: Decodes instruction bits inside the IR and triggers coordinate control signals to route signals across buses.</li>
+            <li><strong>ALU (Arithmetic Logic Unit)</strong>: The computer's grand calculator. It is a massive block built from ripple-carry adders, subtractors, and logical gate arrays. It takes two input binary values, performs a specific operation (addition, bitwise AND, etc.), and outputs the result.</li>
+            <li><strong>General Purpose Registers</strong>: A small bank of incredibly fast 64-bit storage circuits located right next to the ALU. These hold the immediate variables being calculated.</li>
+            <li><strong>Program Counter (PC)</strong>: A special register that stores the memory address of the <em>next</em> instruction waiting to be executed.</li>
+            <li><strong>Instruction Register (IR)</strong>: A register that holds the binary code of the instruction <em>currently</em> being executed.</li>
+            <li><strong>Control Unit</strong>: The conductor of the orchestra. It decodes the instruction bits sitting inside the IR and triggers the coordinate control signals to the multiplexers, routing data across the internal buses.</li>
           </ul>
         </section>
 
         <!-- CHAPTER 21: FETCH-EXECUTE -->
         <section id="ch-fetch" class="book-chapter">
           <div class="chapter-meta">Chapter 21</div>
-          <h2 class="chapter-title">The Fetch–Decode–Execute Cycle</h2>
+          <h2 class="chapter-title">The Programmable Cycle: Fetch-Decode-Execute</h2>
           <hr class="section-divider">
-          <p>The CPU operates by continuously executing a three-stage machine cycle synchronized by the system clock:</p>
+          <p>This is the magical moment where static hardware becomes a dynamic, programmable machine capable of running software. The CPU operates by continuously executing a three-stage machine cycle, driven strictly by the rhythmic pulsing of the system clock:</p>
           <ol>
-            <li><strong>Fetch</strong>: The Control Unit fetches the instruction located at the memory address currently stored in the Program Counter (PC) and loads it into the Instruction Register (IR). The PC is then incremented to point to the next address.</li>
-            <li><strong>Decode</strong>: The Control Unit decodes the opcode bits in the IR to determine the operation (e.g. ADD, LOAD, JUMP). It configures the ALU inputs and routing paths.</li>
-            <li><strong>Execute</strong>: The operation is executed (e.g., the ALU performs the addition) and the result is written back to a register or memory location.</li>
+            <li><strong>Fetch</strong>: The Control Unit reads the memory address currently stored in the Program Counter (PC). It fetches the binary instruction at that address from the main RAM, and loads it into the Instruction Register (IR). The PC is then automatically incremented by 1 so it points to the next instruction in line.</li>
+            <li><strong>Decode</strong>: The Control Unit decodes the opcode bits in the IR. If the instruction is <code>0010</code>, the Control Unit might recognize this as the "ADD" command. It immediately sends voltage signals to the internal multiplexers to route the requested registers into the ALU's inputs, and configures the ALU to perform addition.</li>
+            <li><strong>Execute</strong>: The operation physically occurs as voltage propagates through the logic gates (e.g., the ALU performs the ripple-carry addition). On the next clock edge, the final calculated result is written back to a destination register.</li>
           </ol>
+          <p>This cycle repeats billions of times per second (e.g., 4 GHz). By feeding the CPU different lists of binary instructions in memory (a program), the exact same physical logic gates can be directed to calculate graphics for a video game, route network traffic, or run an operating system.</p>
         </section>
 
         <!-- CHAPTER 22: ISA CONTRACT -->
@@ -968,6 +1098,30 @@
       </footer>
     </main>
 
+  </div>
+
+  <!-- Chatbot Tooltip -->
+  <button id="explain-tooltip" class="explain-tooltip" style="display: none;">
+    <svg viewBox="0 0 24 24" class="icon"><path fill="currentColor" d="M9 21c0 .5.4 1 1 1h4c.6 0 1-.5 1-1v-1H9v1zm3-19C6.5 2 2 6.5 2 12c0 2.4 1.1 4.5 2.8 6h14.4c1.7-1.5 2.8-3.6 2.8-6 0-5.5-4.5-10-10-10zm0 16H8.5c-.8 0-1.5-.7-1.5-1.5S7.7 15 8.5 15h7c.8 0 1.5.7 1.5 1.5S16.3 18 15.5 18H12zm2.5-4H9.5c-.8 0-1.5-.7-1.5-1.5S8.7 11 9.5 11h5c.8 0 1.5.7 1.5 1.5S15.3 14 14.5 14z"/></svg>
+    Explain this
+  </button>
+
+  <!-- Chatbot Widget -->
+  <div id="chatbot-widget" class="chatbot-widget collapsed">
+    <div class="chatbot-header" id="chatbot-header">
+      <span class="chatbot-title">
+        <svg viewBox="0 0 24 24" class="icon" style="width:18px;height:18px;vertical-align:text-bottom;margin-right:4px;"><path fill="currentColor" d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13A2.5 2.5 0 0 0 5 15.5A2.5 2.5 0 0 0 7.5 18a2.5 2.5 0 0 0 2.5-2.5A2.5 2.5 0 0 0 7.5 13m9 0a2.5 2.5 0 0 0-2.5 2.5a2.5 2.5 0 0 0 2.5 2.5a2.5 2.5 0 0 0 2.5-2.5a2.5 2.5 0 0 0-2.5-2.5Z"/></svg>
+        AI Tutor
+      </span>
+      <button id="chatbot-toggle-btn" class="btn-icon">
+        <svg viewBox="0 0 24 24" class="icon"><path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6l-6 6z"/></svg>
+      </button>
+    </div>
+    <div class="chatbot-body">
+      <div id="chatbot-messages" class="chatbot-messages">
+        <div class="chat-msg ai">Hi! Highlight any text in the book and click "Explain this" to learn more.</div>
+      </div>
+    </div>
   </div>
 
   <script src="index.js"></script>

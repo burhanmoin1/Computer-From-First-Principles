@@ -61,37 +61,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const activeChapter = document.getElementById(targetId);
     if (!activeChapter) return;
     
-    // Hide all chapters, show active
-    chapters.forEach(ch => ch.classList.remove('active'));
-    activeChapter.classList.add('active');
+    // Smooth scroll to the chapter
+    activeChapter.scrollIntoView({ behavior: 'smooth' });
     
-    // Update sidebar navigation active state
-    navItems.forEach(item => {
-      if (item.getAttribute('data-target') === targetId) {
-        item.classList.add('active');
-      } else {
-        item.classList.remove('active');
-      }
-    });
-    
-    // Update indicator
-    const chapterNumText = activeChapter.querySelector('.chapter-meta').textContent;
+    // Update indicator immediately for feedback
     const chapterTitleText = activeChapter.querySelector('.chapter-title').textContent;
-    chapterTitleIndicator.textContent = `Part I — The Physical World / ${chapterTitleText}`;
-    
-    // Find current index
-    currentChapterIndex = chapters.indexOf(activeChapter);
-    
-    // Update prev/next button states
-    btnPrev.disabled = currentChapterIndex === 0;
-    btnNext.disabled = currentChapterIndex === chapters.length - 1;
-    
-    // Scroll reader to top
-    readerPages.scrollTop = 0;
-    
-    // Trigger canvas resizing or init if needed
-    triggerSimInitialization(targetId);
-    updateProgressBar();
+    chapterTitleIndicator.textContent = `Reading: ${chapterTitleText}`;
   }
 
   // Bind Sidebar Nav Click
@@ -104,40 +79,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Prev / Next Chapter Click
-  btnPrev.addEventListener('click', () => {
-    if (currentChapterIndex > 0) {
-      const targetId = chapters[currentChapterIndex - 1].id;
-      navigateToChapter(targetId);
-    }
-  });
-
-  btnNext.addEventListener('click', () => {
-    if (currentChapterIndex < chapters.length - 1) {
-      const targetId = chapters[currentChapterIndex + 1].id;
-      navigateToChapter(targetId);
-    }
-  });
+  // Hide the prev/next buttons as we are now scrolling
+  if (btnPrev) btnPrev.style.display = 'none';
+  if (btnNext) btnNext.style.display = 'none';
 
   // Progress Bar update
   function updateProgressBar() {
-    const scrollableHeight = readerPages.scrollHeight - readerPages.clientHeight;
+    const scrollableHeight = body.scrollHeight - window.innerHeight;
     if (scrollableHeight <= 0) {
       progressBar.style.width = '100%';
       return;
     }
-    const scrolled = (readerPages.scrollTop / scrollableHeight) * 100;
+    const scrolled = (window.scrollY / scrollableHeight) * 100;
     progressBar.style.width = `${scrolled}%`;
   }
   
-  readerPages.addEventListener('scroll', updateProgressBar);
+  window.addEventListener('scroll', updateProgressBar);
   window.addEventListener('resize', updateProgressBar);
 
-  // Initialize view
-  navigateToChapter('ch-atoms');
-
   // ==========================================================================
-  // 2. Simulation Handlers & Classes
+  // 2. Simulation Handlers & Intersection Observer
   // ==========================================================================
   
   // Track active simulations to avoid drawing loops in the background
@@ -149,19 +110,62 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   function triggerSimInitialization(chapterId) {
-    // Reset loops
-    Object.keys(activeLoops).forEach(key => activeLoops[key] = false);
-    
     if (chapterId === 'ch-electricity') {
+      activeLoops.electricity = true;
       initElectricitySim();
     } else if (chapterId === 'ch-semiconductors') {
+      activeLoops.doping = true;
       initDopingSim();
     } else if (chapterId === 'ch-mosfets') {
+      activeLoops.mosfet = true;
       initMOSFETSim();
     } else if (chapterId === 'ch-cmos') {
+      activeLoops.cmos = true;
       initCMOSSim();
     }
   }
+
+  function stopSimInitialization(chapterId) {
+    if (chapterId === 'ch-electricity') activeLoops.electricity = false;
+    else if (chapterId === 'ch-semiconductors') activeLoops.doping = false;
+    else if (chapterId === 'ch-mosfets') activeLoops.mosfet = false;
+    else if (chapterId === 'ch-cmos') activeLoops.cmos = false;
+  }
+
+  // Set up Intersection Observer for scrolling chapters
+  const observerOptions = {
+    root: null, // observe viewport
+    rootMargin: '0px',
+    threshold: 0.2 // Trigger when 20% of chapter is visible
+  };
+
+  const chapterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const chapterId = entry.target.id;
+      if (entry.isIntersecting) {
+        // Update sidebar
+        navItems.forEach(item => {
+          if (item.getAttribute('data-target') === chapterId) {
+            item.classList.add('active');
+            
+            // Update Top Header
+            const chapterTitleText = entry.target.querySelector('.chapter-title').textContent;
+            chapterTitleIndicator.textContent = `Reading: ${chapterTitleText}`;
+          } else {
+            item.classList.remove('active');
+          }
+        });
+
+        // Start/resume simulation if present
+        triggerSimInitialization(chapterId);
+      } else {
+        // Stop simulator if chapter scrolled out of view
+        stopSimInitialization(chapterId);
+      }
+    });
+  }, observerOptions);
+
+  chapters.forEach(ch => chapterObserver.observe(ch));
 
   // --------------------------------------------------------------------------
   // A. Electricity Drift Simulator
@@ -169,6 +173,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function initElectricitySim() {
     const canvas = document.getElementById('canvas-electricity');
     if (!canvas) return;
+    if (canvas.dataset.initialized) {
+      if (canvas.restartAnimation) canvas.restartAnimation();
+      return;
+    }
+    canvas.dataset.initialized = 'true';
     const ctx = canvas.getContext('2d');
     
     const slider = document.getElementById('slide-voltage');
@@ -312,6 +321,9 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(animate);
     }
     
+    canvas.restartAnimation = function() {
+      if (activeLoops.electricity) requestAnimationFrame(animate);
+    };
     animate();
   }
 
@@ -321,6 +333,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function initDopingSim() {
     const canvas = document.getElementById('canvas-doping');
     if (!canvas) return;
+    if (canvas.dataset.initialized) {
+      if (canvas.restartAnimation) canvas.restartAnimation();
+      return;
+    }
+    canvas.dataset.initialized = 'true';
     const ctx = canvas.getContext('2d');
     
     const btnIntrinsic = document.getElementById('btn-dope-intrinsic');
@@ -555,6 +572,9 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(animate);
     }
     
+    canvas.restartAnimation = function() {
+      if (activeLoops.doping) requestAnimationFrame(animate);
+    };
     animate();
   }
 
@@ -564,6 +584,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function initMOSFETSim() {
     const canvas = document.getElementById('canvas-mosfet');
     if (!canvas) return;
+    if (canvas.dataset.initialized) {
+      if (canvas.restartAnimation) canvas.restartAnimation();
+      return;
+    }
+    canvas.dataset.initialized = 'true';
     const ctx = canvas.getContext('2d');
     
     const slider = document.getElementById('slide-gate-v');
@@ -765,6 +790,9 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(animate);
     }
     
+    canvas.restartAnimation = function() {
+      if (activeLoops.mosfet) requestAnimationFrame(animate);
+    };
     animate();
   }
 
@@ -774,6 +802,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function initCMOSSim() {
     const canvas = document.getElementById('canvas-cmos');
     if (!canvas) return;
+    if (canvas.dataset.initialized) {
+      if (canvas.restartAnimation) canvas.restartAnimation();
+      return;
+    }
+    canvas.dataset.initialized = 'true';
     const ctx = canvas.getContext('2d');
     
     const btnLow = document.getElementById('btn-cmos-in-low');
@@ -991,6 +1024,118 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(animate);
     }
     
+    canvas.restartAnimation = function() {
+      if (activeLoops.cmos) requestAnimationFrame(animate);
+    };
     animate();
   }
+
+  // ==========================================================================
+  // 3. AI Chatbot Integration
+  // ==========================================================================
+
+  const chatbotWidget = document.getElementById('chatbot-widget');
+  const chatbotHeader = document.getElementById('chatbot-header');
+  const chatbotMessages = document.getElementById('chatbot-messages');
+  const explainTooltip = document.getElementById('explain-tooltip');
+  
+  let selectedTextForAI = '';
+  let selectedContextForAI = '';
+
+  // Toggle chatbot
+  chatbotHeader.addEventListener('click', () => {
+    chatbotWidget.classList.toggle('collapsed');
+  });
+
+  // Handle text selection for tooltip
+  document.addEventListener('selectionchange', () => {
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0 && !selection.isCollapsed) {
+      const text = selection.toString().trim();
+      if (text.length > 0 && text.length < 200) {
+        selectedTextForAI = text;
+        
+        // Try to get surrounding paragraph for context
+        let contextNode = selection.anchorNode;
+        while (contextNode && contextNode.nodeType !== Node.ELEMENT_NODE) {
+          contextNode = contextNode.parentNode;
+        }
+        if (contextNode) {
+          selectedContextForAI = contextNode.textContent.trim().substring(0, 500); // 500 chars max context
+        } else {
+          selectedContextForAI = text;
+        }
+
+        // Position tooltip
+        const range = selection.getRangeAt(0);
+        const rect = range.getBoundingClientRect();
+        
+        explainTooltip.style.left = `${rect.left + rect.width / 2}px`;
+        explainTooltip.style.top = `${rect.top + window.scrollY}px`;
+        explainTooltip.style.display = 'flex';
+        return;
+      }
+    }
+    
+    // Hide tooltip if no selection or selection is too large
+    explainTooltip.style.display = 'none';
+  });
+
+  // Handle tooltip click
+  explainTooltip.addEventListener('click', () => {
+    // Hide tooltip and clear selection visually
+    explainTooltip.style.display = 'none';
+    window.getSelection().removeAllRanges();
+
+    // Open chatbot
+    chatbotWidget.classList.remove('collapsed');
+    
+    // Append user message
+    appendMessage(`Explain: "${selectedTextForAI}"`, 'user');
+    
+    // Append loading bubble
+    const loadingId = 'loading-' + Date.now();
+    appendMessage(`<div class="chat-loading"><span></span><span></span><span></span></div>`, 'ai', loadingId);
+
+    // Fetch explanation from API
+    fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text: selectedTextForAI,
+        context: selectedContextForAI
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      removeMessage(loadingId);
+      if (data.explanation) {
+        // Simple formatting to add paragraphs
+        const formatted = data.explanation.replace(/\\n/g, '<br/>');
+        appendMessage(formatted, 'ai');
+      } else {
+        appendMessage('Sorry, I encountered an error explaining that.', 'ai');
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      removeMessage(loadingId);
+      appendMessage('Connection error. Is the server running?', 'ai');
+    });
+  });
+
+  function appendMessage(htmlContent, type, id = null) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `chat-msg ${type}`;
+    if (id) msgDiv.id = id;
+    msgDiv.innerHTML = htmlContent;
+    chatbotMessages.appendChild(msgDiv);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+  }
+
+  function removeMessage(id) {
+    const msg = document.getElementById(id);
+    if (msg) msg.remove();
+  }
+
 });
