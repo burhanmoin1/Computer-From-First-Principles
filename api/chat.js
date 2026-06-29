@@ -1,22 +1,9 @@
 const Groq = require('groq-sdk');
-const db = require('./db');
+const { saveMessage } = require('./db');
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
-
-function saveMessage(userId, role, message) {
-  return new Promise((resolve, reject) => {
-    db.run(
-      'INSERT INTO chat_history (user_id, role, message) VALUES (?, ?, ?)',
-      [userId, role, message],
-      function (err) {
-        if (err) reject(err);
-        else resolve(this.lastID);
-      }
-    );
-  });
-}
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {

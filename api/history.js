@@ -1,4 +1,4 @@
-const db = require('./db');
+const { getHistory } = require('./db');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -12,17 +12,8 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    db.all(
-      'SELECT role, message, timestamp FROM chat_history WHERE user_id = ? ORDER BY id ASC',
-      [userId],
-      (err, rows) => {
-        if (err) {
-          console.error('Database read error:', err);
-          return res.status(500).json({ error: 'Failed to retrieve history' });
-        }
-        return res.status(200).json({ history: rows || [] });
-      }
-    );
+    const rows = await getHistory(userId);
+    return res.status(200).json({ history: rows || [] });
   } catch (error) {
     console.error('History retrieval error:', error);
     return res.status(500).json({ error: 'Failed to retrieve history' });
