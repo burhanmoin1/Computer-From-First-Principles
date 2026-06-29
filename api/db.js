@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 
 // Determine which database driver to use
@@ -28,28 +29,19 @@ if (databaseUrl) {
   `).catch(err => console.error('Error initializing PostgreSQL table:', err));
 
 } else {
-  const sqlite3 = require('sqlite3').verbose();
+  dbType = 'json';
+  // Use /tmp/chat_history.json on Vercel, or local chat_history.json locally
   const isVercel = process.env.VERCEL || process.env.NOW_BUILD;
-  const dbPath = isVercel ? '/tmp/chat.db' : path.join(__dirname, '..', 'chat.db');
-
-  const sqliteDb = new sqlite3.Database(dbPath, (err) => {
-    if (err) {
-      console.error('Error opening SQLite database:', err);
-    } else {
-      sqliteDb.run(`
-        CREATE TABLE IF NOT EXISTS chat_history (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          user_id TEXT NOT NULL,
-          role TEXT NOT NULL,
-          message TEXT NOT NULL,
-          timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
+  dbInstance = isVercel ? '/tmp/chat_history.json' : path.join(__dirname, '..', 'chat_history.json');
+  
+  // Create empty JSON file if it doesn't exist
+  if (!fs.existsSync(dbInstance)) {
+    try {
+      fs.writeFileSync(dbInstance, JSON.stringify([]));
+    } catch (err) {
+      console.error('Error creating JSON file:', err);
     }
-  });
-
-  dbInstance = sqliteDb;
-  dbType = 'sqlite';
+  }
 }
 
 // Unified saveMessage function (returns a promise)
@@ -60,15 +52,25 @@ function saveMessage(userId, role, message) {
       [userId, role, message]
     ).then(res => res.rows[0].id);
   } else {
-    return new Promise((resolve, reject) => {
-      dbInstance.run(
-        'INSERT INTO chat_history (user_id, role, message) VALUES (?, ?, ?)',
-        [userId, role, message],
-        function (err) {
-          if (err) reject(err);
-          else resolve(this.lastID);
+    return new Promise((resolve) => {
+      try {
+        let history = [];
+        if (fs.existsSync(dbInstance)) {
+          const data = fs.readFileSync(dbInstance, 'utf8');
+          history = JSON.parse(data || '[]');
         }
-      );
+        history.push({
+          user_id: userId,
+          role: role,
+          message: message,
+          timestamp: new Date().toISOString()
+        });
+        fs.writeFileSync(dbInstance, JSON.stringify(history, null, 2));
+        resolve(history.length);
+      } catch (err) {
+        console.error('Error saving to JSON file:', err);
+        resolve(0);
+      }
     });
   }
 }
@@ -81,15 +83,19 @@ function getHistory(userId) {
       [userId]
     ).then(res => res.rows);
   } else {
-    return new Promise((resolve, reject) => {
-      dbInstance.all(
-        'SELECT role, message, timestamp FROM chat_history WHERE user_id = ? ORDER BY id ASC',
-        [userId],
-        (err, rows) => {
-          if (err) reject(err);
-          else resolve(rows || []);
+    return new Promise((resolve) => {
+      try {
+        if (!fs.existsSync(dbInstance)) {
+          return resolve([]);
         }
-      );
+        const data = fs.readFileSync(dbInstance, 'utf8');
+        const history = JSON.parse(data || '[]');
+        const userHistory = history.filter(item => item.user_id === userId);
+        resolve(userHistory);
+      } catch (err) {
+        console.error('Error reading from JSON file:', err);
+        resolve([]);
+      }
     });
   }
 }
